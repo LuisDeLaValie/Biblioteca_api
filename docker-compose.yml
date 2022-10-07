@@ -1,0 +1,16 @@
+# docker-compose up [--build]
+version: '3'
+
+services:
+  app:
+    container_name: biblioteca
+    build: .
+    ports:
+      - 80:8000
+    networks:
+      - mongo-network
+
+networks:
+  mongo-network:
+    external: true
+      
