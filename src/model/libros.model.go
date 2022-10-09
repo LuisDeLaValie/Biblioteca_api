@@ -11,23 +11,24 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-
- 
-
-
 type Libro struct {
 	Key primitive.ObjectID `bson:"_id,omitempty" json:"key,omitempty"`
 	Titulo string `json:"titulo"`
 	Path string `json:"path"`
+	Descripcion string `json:"descripcion,omitempty"`
+	Autor string `json:"autor,omitempty"`
+	Origen string `json:"origen,omitempty"`
 	Creado time.Time `json:"creado"`
-
 }
 
 type ListLibros []*Libro
 
 
-var 	ctx = 	context.Background()
+var ctx = context.Background()
 var collecion = conn.GetCollection("lirbos")
+
+
+// https://www.mongodb.com/docs/drivers/go/current/fundamentals/crud/
 
 func (this *Libro) Crear()  error {
 		
@@ -66,8 +67,20 @@ func (this *Libro) Listar() (ListLibros, error) {
 	return libros, nil
 
 }
-func (this *Libro) Ver()  error {
-	return nil
+func (this *Libro) Ver() error {
+	
+	filter := bson.D{{"_id", this.Key}}
+
+	err:= collecion.FindOne(ctx,filter).Decode(&this)
+	if err != nil {
+		return  err
+	}else {
+		return nil
+	}
+
+	
+	
+	
 }
 func (this *Libro) Editar() error {
 	// oid,_ := primitive.ObjectIDFromHex(this.Key)
@@ -88,9 +101,11 @@ func (this *Libro) Editar() error {
 
 	return nil
 }
-func (this *Libro) Actualizar() error {
-	return nil
-}
-func (this *Libro) eliminar() error {
+func (this *Libro) Eliminar() error {
+	filter := bson.D{{"_id", this.Key}}
+	_, err := collecion.DeleteOne(context.TODO(), filter)
+	if err != nil {
+		return err
+	}
 	return nil
 }

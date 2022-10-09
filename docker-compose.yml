@@ -9,6 +9,8 @@ services:
       - 80:8000
     networks:
       - mongo-network
+    environment:
+      - MONGODB_URI=mongodb://TDTxLE:comemierda1@TDTxLE-mongodb:27017
 
 networks:
   mongo-network:

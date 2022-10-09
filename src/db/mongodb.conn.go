@@ -14,12 +14,13 @@ import (
 var (
 	usr = "TDTxLE"
 	pwd = "comemierda1"
-	host = "127.0.0.1"
-	port = 12500//27017
+	host = "TDTxLE-mongodb"
+	port = 27017
 	database = "Libreria"
 )
 
 func GetCollection(coll string) *mongo.Collection {
+	// uri := os.Getenv("MONGODB_URI")
 	uri := fmt.Sprintf("mongodb://%s:%s@%s:%d",usr,pwd,host,port)
 	// uri := fmt.Sprintf("mongodb://%s:%d",host,port)
 	client,err := mongo.NewClient(options.Client().ApplyURI(uri))
