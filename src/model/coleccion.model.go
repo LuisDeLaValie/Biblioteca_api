@@ -9,7 +9,8 @@ import (
 type CollectionLibros struct {
 	Key primitive.ObjectID `bson:"_id,omitempty" json:"key,omitempty"`
 	Titulo string `json:"titulo"`
-	libros []Libro `json:"Libros"`
+	ListaLibros []primitive.ObjectID `bson:"libros,omitempty" json:"keyLibros,omitempty"`
+	Libros []Libros `bson:"_id,omitempty" json:"libros"`
 	Creado time.Time `json:"creado"`
 }
 
