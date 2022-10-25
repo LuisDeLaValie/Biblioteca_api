@@ -6,29 +6,32 @@ import (
 )
 
 
-type CollectionLibros struct {
+
+type Coleccion struct {
 	Key primitive.ObjectID `bson:"_id,omitempty" json:"key,omitempty"`
 	Titulo string `json:"titulo"`
-	ListaLibros []primitive.ObjectID `bson:"libros,omitempty" json:"keyLibros,omitempty"`
-	Libros []Libros `bson:"_id,omitempty" json:"libros"`
+	Sinopsis string `json:"sipnosis"`
+	libors_db []primitive.ObjectID `bson:"libros,omitempty" json:"libros_db,omitempty"`
+	Libos_list []Libro `bosn:"L_s,omitempty" json:"libros,omitempty"`
+	Path string `json:"path"`
 	Creado time.Time `json:"creado"`
 }
 
-func (this *CollectionLibros) Crear() error {
+func (this *Coleccion) Crear() error {
 	return nil
 }
-func (this *CollectionLibros) Listar() error {
+func (this *Coleccion) Listar() error {
 	return nil
 }
-func (this *CollectionLibros) Ver() error {
+func (this *Coleccion) Ver() error {
 	return nil
 }
-func (this *CollectionLibros) Editar() error {
+func (this *Coleccion) Editar() error {
 	return nil
 }
-func (this *CollectionLibros) Actualizar() error {
+func (this *Coleccion) Actualizar() error {
 	return nil
 }
-func (this *CollectionLibros) eliminar() error {
+func (this *Coleccion) eliminar() error {
 	return nil
 }
