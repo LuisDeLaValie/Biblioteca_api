@@ -12,40 +12,34 @@ import (
 	// "github.com/gorilla/mux"
 )
 
-type ErrorRes struct {
-	Error   string `json:"error"`
-	Mensaje string `json:"mensaje,omitempty"`
-	Cuerpo  error  `json:"cuerpo,omitempty"`
-}
-
-func ListarLibros(w http.ResponseWriter, r *http.Request) {
+func ListarColecciones(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	libros, err := m.ListarLibro()
+	colecciones, err := m.ListarColeccion()
 
 	if err != nil {
 		cerror := ErrorRes{Error: "Error obteniendo los datos", Cuerpo: err, Mensaje: err.Error()}
 		json.NewEncoder(w).Encode(cerror)
 	}
-	json.NewEncoder(w).Encode(libros)
+	json.NewEncoder(w).Encode(colecciones)
 }
-func VerLibro(w http.ResponseWriter, r *http.Request) {
+func VerColeccion(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err == nil {
-		libro, err := m.VerLibro(id)
+		coleccion, err := m.VerColeccion(id)
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())
 		} else {
-			json.NewEncoder(w).Encode(libro)
+			json.NewEncoder(w).Encode(coleccion)
 		}
 	} else {
 		json.NewEncoder(w).Encode(err.Error())
 	}
 
 }
-func CrearLibro(w http.ResponseWriter, r *http.Request) {
+func CrearColeccion(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	// Obtener datos del formulario
@@ -54,20 +48,20 @@ func CrearLibro(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(err.Error())
 	} else {
 		// Preparar formulario y mandar la informacion
-		var libro m.LibroFormulario
-		json.Unmarshal(reqBody, &libro)
-		nuevoLibro, err := m.CrearLibro(libro)
+		var coleccion m.ColeccionFormulario
+		json.Unmarshal(reqBody, &coleccion)
+		nuevaColeccion, err := m.CrearColeccion(coleccion)
 
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())
 		} else {
-			json.NewEncoder(w).Encode(nuevoLibro)
+			json.NewEncoder(w).Encode(nuevaColeccion)
 		}
 
 	}
 
 }
-func ActualizarLibro(w http.ResponseWriter, r *http.Request) {
+func ActualizarColeccion(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
@@ -77,14 +71,14 @@ func ActualizarLibro(w http.ResponseWriter, r *http.Request) {
 		reqBody, err := ioutil.ReadAll(r.Body)
 
 		if err == nil {
-			var update m.LibroFormulario
+			var update m.ColeccionFormulario
 			json.Unmarshal(reqBody, &update)
-			libro, err := m.EditarLibro(id, update)
+			coleccion, err := m.EditarColeccion(id, update)
 
 			if err != nil {
 				json.NewEncoder(w).Encode(err.Error())
 			} else {
-				json.NewEncoder(w).Encode(libro)
+				json.NewEncoder(w).Encode(coleccion)
 			}
 		} else {
 			json.NewEncoder(w).Encode(err.Error())
@@ -94,13 +88,13 @@ func ActualizarLibro(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
-func EliminarLibro(w http.ResponseWriter, r *http.Request) {
+func EliminarColeccion(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err == nil {
-		err = m.EliminarLibro(id)
+		err = m.EliminarColeccion(id)
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())
 		}

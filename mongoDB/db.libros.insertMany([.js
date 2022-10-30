@@ -1242,3 +1242,19 @@ db.libros.insertMany([
         creado: ISODate("2022-10-09T03:55:49.578Z")
     }
 ])
+
+
+db.libros.aggregate([
+    {
+        $lookup: {
+            from: 'autor',
+            localField: 'autor.$',
+            foreignField: '_id',
+            as: 'listaLibros',
+        }
+    },
+    { $unwind: '$listaLibros' },
+    { $project: { nombre: true, libro: '$listaLibros.titulo' } }
+]).pretty()
+
+db.libros.updateOne()
