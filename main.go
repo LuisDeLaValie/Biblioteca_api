@@ -26,6 +26,12 @@ func main() {
 	r.HandleFunc("/coleccion/{key:[a-zA-Z0-9]+}", handler.ActualizarColeccion).Methods(http.MethodPut)
 	r.HandleFunc("/coleccion/{key:[a-zA-Z0-9]+}", handler.EliminarColeccion).Methods(http.MethodDelete)
 
+	r.HandleFunc("/autor", handler.ListarAutores).Methods(http.MethodGet)
+	r.HandleFunc("/autor/{key:[a-zA-Z0-9]+}", handler.VerAutor).Methods(http.MethodGet)
+	r.HandleFunc("/autor", handler.CrearAutor).Methods(http.MethodPost)
+	r.HandleFunc("/autor/{key:[a-zA-Z0-9]+}", handler.ActualizarAutor).Methods(http.MethodPut)
+	r.HandleFunc("/autor/{key:[a-zA-Z0-9]+}", handler.EliminarAutor).Methods(http.MethodDelete)
+
 	// http.Handle("/", r)
 	fmt.Println("Servidor en Linea")
 	log.Fatal(http.ListenAndServe(":8000", r))

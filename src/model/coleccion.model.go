@@ -45,7 +45,7 @@ func CrearColeccion(coleccion ColeccionFormulario) (*Coleccion, error) {
 		if err != nil {
 			return nil, err
 		} else {
-			return nuevaColeccion, err
+			return nuevaColeccion, nil
 		}
 
 	} else {

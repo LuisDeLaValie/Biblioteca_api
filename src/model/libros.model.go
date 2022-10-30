@@ -67,7 +67,7 @@ func CrearLibro(libro LibroFormulario) (*Libro, error) {
 		if err != nil {
 			return nil, err
 		} else {
-			return nuevoLibro, err
+			return nuevoLibro, nil
 		}
 
 	} else {
