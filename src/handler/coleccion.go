@@ -14,8 +14,8 @@ import (
 
 func ListarColecciones(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-
-	colecciones, err := m.ListarColeccion()
+	var col m.Coleccion
+	colecciones, err := col.Listar()
 
 	if err != nil {
 		cerror := ErrorRes{Error: "Error obteniendo los datos", Cuerpo: err, Mensaje: err.Error()}
@@ -28,11 +28,12 @@ func VerColeccion(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err == nil {
-		coleccion, err := m.VerColeccion(id)
+		var col m.Coleccion
+		err := col.Ver(id)
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())
 		} else {
-			json.NewEncoder(w).Encode(coleccion)
+			json.NewEncoder(w).Encode(col)
 		}
 	} else {
 		json.NewEncoder(w).Encode(err.Error())
@@ -50,7 +51,7 @@ func CrearColeccion(w http.ResponseWriter, r *http.Request) {
 		// Preparar formulario y mandar la informacion
 		var coleccion m.ColeccionFormulario
 		json.Unmarshal(reqBody, &coleccion)
-		nuevaColeccion, err := m.CrearColeccion(coleccion)
+		nuevaColeccion, err := coleccion.Crear()
 
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())
@@ -73,7 +74,7 @@ func ActualizarColeccion(w http.ResponseWriter, r *http.Request) {
 		if err == nil {
 			var update m.ColeccionFormulario
 			json.Unmarshal(reqBody, &update)
-			coleccion, err := m.EditarColeccion(id, update)
+			coleccion, err := update.Editar(id)
 
 			if err != nil {
 				json.NewEncoder(w).Encode(err.Error())
@@ -94,7 +95,8 @@ func EliminarColeccion(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err == nil {
-		err = m.EliminarColeccion(id)
+		var col m.Coleccion
+		err = col.Eliminar(id)
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())
 		}

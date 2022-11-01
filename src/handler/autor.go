@@ -14,8 +14,8 @@ import (
 
 func ListarAutores(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-
-	colecciones, err := m.ListarAutor()
+	var a m.Autor
+	colecciones, err := a.Listar()
 
 	if err != nil {
 		cerror := ErrorRes{Error: "Error obteniendo los datos", Cuerpo: err, Mensaje: err.Error()}
@@ -28,7 +28,9 @@ func VerAutor(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err == nil {
-		autor := m.VerAutor(id)
+		var autor m.Autor
+		autor.Ver(id)
+
 		json.NewEncoder(w).Encode(autor)
 	} else {
 		json.NewEncoder(w).Encode(err.Error())
@@ -46,12 +48,12 @@ func CrearAutor(w http.ResponseWriter, r *http.Request) {
 		// Preparar formulario y mandar la informacion
 		var autor m.Autor
 		json.Unmarshal(reqBody, &autor)
-		nuevaautor, err := m.CrearAutor(autor)
+		err := autor.Crear()
 
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())
 		} else {
-			json.NewEncoder(w).Encode(nuevaautor)
+			json.NewEncoder(w).Encode(autor)
 		}
 
 	}
@@ -69,12 +71,12 @@ func ActualizarAutor(w http.ResponseWriter, r *http.Request) {
 		if err == nil {
 			var update m.Autor
 			json.Unmarshal(reqBody, &update)
-			coleccion, err := m.EditarAutor(id, update)
+			err := update.Editar(id)
 
 			if err != nil {
 				json.NewEncoder(w).Encode(err.Error())
 			} else {
-				json.NewEncoder(w).Encode(coleccion)
+				json.NewEncoder(w).Encode(update)
 			}
 		} else {
 			json.NewEncoder(w).Encode(err.Error())
@@ -90,7 +92,8 @@ func EliminarAutor(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err == nil {
-		err = m.EliminarAutor(id)
+		var autor m.Autor
+		err = autor.Eliminar(id)
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())
 		}

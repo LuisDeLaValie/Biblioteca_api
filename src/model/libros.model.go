@@ -12,11 +12,16 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// https://www.mongodb.com/docs/drivers/go/current/fundamentals/crud/
+
 type _Paginacions struct {
 	To  int
 	End int
 }
-
+type origen struct {
+	Nombre string `json:"nombre"`
+	Url    string `json:"url"`
+}
 type Libro struct {
 	Key        primitive.ObjectID `json:"key" bson:"_id,omitempty" `
 	Titulo     string             `json:"titulo"`
@@ -29,54 +34,10 @@ type Libro struct {
 	Creado     time.Time          `json:"creado"`
 }
 
-type origen struct {
-	Nombre string `json:"nombre"`
-	Url    string `json:"url"`
-}
 type ListLibros []*Libro
 
-type LibroFormulario struct {
-	Titulo     string               `json:"titulo" bson:"titulo"`
-	Sipnosis   string               `json:"sinopsis,omitempty" bson:"sinopsis,omitempty"`
-	Autores    []primitive.ObjectID `json:"autores,omitempty" bson:"autor,omitempty"`
-	Editorail  string               `json:"editorial,omitempty" bson:"editorial,omitempty"`
-	Paginas    int                  `json:"paginas,omitempty" bson:"-"`
-	Pagina     int                  `json:"pagina,omitempty" bson:"-"`
-	Origen     origen               `json:"origen" bson:"origen"`
-	Path       string               `json:"path,omitempty" bson:"path,omitempty"`
-	Creado     time.Time            `json:"creado,omitempty" bson:"creado,omitempty"`
-	Paginacion _Paginacions         `json:"_,omitempty" bson:"paginacion,omitempty"`
-}
-
-// https://www.mongodb.com/docs/drivers/go/current/fundamentals/crud/
-
-func CrearLibro(libro LibroFormulario) (*Libro, error) {
-	var _ctx = context.Background()
-	var _collecion = conn.GetCollection("libros")
-
-	// Preparar datos del formulario
-	libro.Creado = time.Now()
-	libro.Paginacion = _Paginacions{0, libro.Paginas}
-
-	// Insertar Libro
-	oid, err := _collecion.InsertOne(_ctx, libro)
-
-	if err == nil {
-		nuevoLibro, err := VerLibro(oid.InsertedID.(primitive.ObjectID))
-
-		if err != nil {
-			return nil, err
-		} else {
-			return nuevoLibro, nil
-		}
-
-	} else {
-		return nil, err
-	}
-}
-
 /// Listar todos los sibros
-func ListarLibro() (ListLibros, error) {
+func (l Libro) Listar() (ListLibros, error) {
 	var _ctx = context.Background()
 	var _collecion = conn.GetCollection("libros")
 
@@ -104,8 +65,7 @@ func ListarLibro() (ListLibros, error) {
 		return nil, err
 	}
 }
-
-func VerLibro(key primitive.ObjectID) (*Libro, error) {
+func (l *Libro) Ver(key primitive.ObjectID) error {
 	var _ctx = context.Background()
 	var _collecion = conn.GetCollection("libros")
 
@@ -118,21 +78,70 @@ func VerLibro(key primitive.ObjectID) (*Libro, error) {
 	cur, err := _collecion.Aggregate(_ctx, mongo.Pipeline{lookupStage, projectStage, machtState, limtState})
 
 	if err == nil {
-		var lirbo *Libro
 		cur.Next(_ctx)
-		err = cur.Decode(&lirbo)
-
-		if err == nil {
-			return lirbo, nil
+		err = cur.Decode(&l)
+		if err != nil {
+			return err
 		} else {
-			return nil, err
+			return nil
 		}
+	} else {
+		return err
+	}
+}
+func (l *Libro) Eliminar(key primitive.ObjectID) error {
+
+	var _collecion = conn.GetCollection("libros")
+
+	filter := bson.M{"_id": key}
+	_, err := _collecion.DeleteOne(context.TODO(), filter)
+	if err != nil {
+		return err
+	} else {
+		return nil
+	}
+}
+
+type LibroFormulario struct {
+	Titulo     string               `json:"titulo" bson:"titulo"`
+	Sipnosis   string               `json:"sinopsis,omitempty" bson:"sinopsis,omitempty"`
+	Autores    []primitive.ObjectID `json:"autores,omitempty" bson:"autor,omitempty"`
+	Editorail  string               `json:"editorial,omitempty" bson:"editorial,omitempty"`
+	Paginas    int                  `json:"paginas,omitempty" bson:"-"`
+	Pagina     int                  `json:"pagina,omitempty" bson:"-"`
+	Origen     origen               `json:"origen" bson:"origen"`
+	Path       string               `json:"path,omitempty" bson:"path,omitempty"`
+	Creado     time.Time            `json:"creado,omitempty" bson:"creado,omitempty"`
+	Paginacion _Paginacions         `json:"_,omitempty" bson:"paginacion,omitempty"`
+}
+
+func (libro *LibroFormulario) Crear() (*Libro, error) {
+	var _ctx = context.Background()
+	var _collecion = conn.GetCollection("libros")
+
+	// Preparar datos del formulario
+	libro.Creado = time.Now()
+	libro.Paginacion = _Paginacions{0, libro.Paginas}
+
+	// Insertar Libro
+	oid, err := _collecion.InsertOne(_ctx, libro)
+
+	if err == nil {
+
+		var nuevoLibro *Libro
+		err := nuevoLibro.Ver(oid.InsertedID.(primitive.ObjectID))
+
+		if err != nil {
+			return nil, err
+		} else {
+			return nuevoLibro, nil
+		}
+
 	} else {
 		return nil, err
 	}
 }
-
-func EditarLibro(key primitive.ObjectID, upLibro LibroFormulario) (*Libro, error) {
+func (upLibro *LibroFormulario) Editar(key primitive.ObjectID) (*Libro, error) {
 	var _ctx = context.Background()
 	var _collecion = conn.GetCollection("libros")
 
@@ -153,25 +162,14 @@ func EditarLibro(key primitive.ObjectID, upLibro LibroFormulario) (*Libro, error
 	if err != nil {
 		return nil, err
 	} else {
-		libro, err := VerLibro(key)
+
+		var libro *Libro
+		err := libro.Ver(key)
 
 		if err != nil {
 			return nil, err
 		} else {
 			return libro, nil
 		}
-	}
-
-}
-func EliminarLibro(key primitive.ObjectID) error {
-
-	var _collecion = conn.GetCollection("libros")
-
-	filter := bson.M{"_id": key}
-	_, err := _collecion.DeleteOne(context.TODO(), filter)
-	if err != nil {
-		return err
-	} else {
-		return nil
 	}
 }

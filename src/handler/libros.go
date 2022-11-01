@@ -21,7 +21,8 @@ type ErrorRes struct {
 func ListarLibros(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	libros, err := m.ListarLibro()
+	var l m.Libro
+	libros, err := l.Listar()
 
 	if err != nil {
 		cerror := ErrorRes{Error: "Error obteniendo los datos", Cuerpo: err, Mensaje: err.Error()}
@@ -34,7 +35,8 @@ func VerLibro(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err == nil {
-		libro, err := m.VerLibro(id)
+		var libro m.Libro
+		err := libro.Ver(id)
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())
 		} else {
@@ -43,7 +45,6 @@ func VerLibro(w http.ResponseWriter, r *http.Request) {
 	} else {
 		json.NewEncoder(w).Encode(err.Error())
 	}
-
 }
 func CrearLibro(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -56,7 +57,7 @@ func CrearLibro(w http.ResponseWriter, r *http.Request) {
 		// Preparar formulario y mandar la informacion
 		var libro m.LibroFormulario
 		json.Unmarshal(reqBody, &libro)
-		nuevoLibro, err := m.CrearLibro(libro)
+		nuevoLibro, err := libro.Crear()
 
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())
@@ -65,7 +66,6 @@ func CrearLibro(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
-
 }
 func ActualizarLibro(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -79,7 +79,7 @@ func ActualizarLibro(w http.ResponseWriter, r *http.Request) {
 		if err == nil {
 			var update m.LibroFormulario
 			json.Unmarshal(reqBody, &update)
-			libro, err := m.EditarLibro(id, update)
+			libro, err := update.Editar(id)
 
 			if err != nil {
 				json.NewEncoder(w).Encode(err.Error())
@@ -92,7 +92,6 @@ func ActualizarLibro(w http.ResponseWriter, r *http.Request) {
 	} else {
 		json.NewEncoder(w).Encode(err.Error())
 	}
-
 }
 func EliminarLibro(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -100,10 +99,10 @@ func EliminarLibro(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err == nil {
-		err = m.EliminarLibro(id)
+		var l m.Libro
+		err = l.Eliminar(id)
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())
 		}
 	}
-
 }

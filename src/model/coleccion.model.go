@@ -19,42 +19,10 @@ type Coleccion struct {
 	Path       string             `json:"path,omitempty" bson:"path,omitempty"`
 	Creado     time.Time          `json:"creado" bson:"creado"`
 }
-type ColeccionFormulario struct {
-	Titulo   string               `json:"titulo" bson:"titulo"`
-	Sinopsis string               `json:"sinopsis,omitempty" bson:"sinopsis,omitempty"`
-	Libors   []primitive.ObjectID `json:"libros" bson:"libros"`
-	Path     string               `json:"path,omitempty" bson:"path,omitempty"`
-	Creado   time.Time            `json:"creado,omitempty" bson:"creado"`
-}
-
 type ListColeccion []*Coleccion
 
-func CrearColeccion(coleccion ColeccionFormulario) (*Coleccion, error) {
-	var _ctx = context.Background()
-	var _collecion = conn.GetCollection("coleccion")
-
-	// Preparar datos del formulario
-	coleccion.Creado = time.Now()
-
-	// Insertar Libro
-	oid, err := _collecion.InsertOne(_ctx, coleccion)
-
-	if err == nil {
-		nuevaColeccion, err := VerColeccion(oid.InsertedID.(primitive.ObjectID))
-
-		if err != nil {
-			return nil, err
-		} else {
-			return nuevaColeccion, nil
-		}
-
-	} else {
-		return nil, err
-	}
-}
-
 /// Listar todos los sibros
-func ListarColeccion() (ListColeccion, error) {
+func (coll Coleccion) Listar() (ListColeccion, error) {
 	var _ctx = context.Background()
 	var _collecion = conn.GetCollection("coleccion")
 
@@ -83,7 +51,7 @@ func ListarColeccion() (ListColeccion, error) {
 	}
 }
 
-func VerColeccion(key primitive.ObjectID) (*Coleccion, error) {
+func (coll *Coleccion) Ver(key primitive.ObjectID) error {
 	var _ctx = context.Background()
 	var _collecion = conn.GetCollection("coleccion")
 
@@ -100,16 +68,62 @@ func VerColeccion(key primitive.ObjectID) (*Coleccion, error) {
 		err = cur.Decode(&coleccion)
 
 		if err == nil {
-			return coleccion, nil
+			return nil
 		} else {
-			return nil, err
+			return err
 		}
+	} else {
+		return err
+	}
+}
+
+func (coll Coleccion) Eliminar(key primitive.ObjectID) error {
+
+	var _collecion = conn.GetCollection("coleccion")
+
+	filter := bson.M{"_id": key}
+	_, err := _collecion.DeleteOne(context.TODO(), filter)
+	if err != nil {
+		return err
+	} else {
+		return nil
+	}
+}
+
+type ColeccionFormulario struct {
+	Titulo   string               `json:"titulo" bson:"titulo"`
+	Sinopsis string               `json:"sinopsis,omitempty" bson:"sinopsis,omitempty"`
+	Libors   []primitive.ObjectID `json:"libros" bson:"libros"`
+	Path     string               `json:"path,omitempty" bson:"path,omitempty"`
+	Creado   time.Time            `json:"creado,omitempty" bson:"creado"`
+}
+
+func (coleccion *ColeccionFormulario) Crear() (*Coleccion, error) {
+	var _ctx = context.Background()
+	var _collecion = conn.GetCollection("coleccion")
+
+	// Preparar datos del formulario
+	coleccion.Creado = time.Now()
+
+	// Insertar Libro
+	oid, err := _collecion.InsertOne(_ctx, coleccion)
+
+	if err == nil {
+		var nuevaColeccion *Coleccion
+		err := nuevaColeccion.Ver(oid.InsertedID.(primitive.ObjectID))
+
+		if err != nil {
+			return nil, err
+		} else {
+			return nuevaColeccion, nil
+		}
+
 	} else {
 		return nil, err
 	}
 }
 
-func EditarColeccion(key primitive.ObjectID, upColecc ColeccionFormulario) (*Coleccion, error) {
+func (upColecc *ColeccionFormulario) Editar(key primitive.ObjectID) (*Coleccion, error) {
 	var _ctx = context.Background()
 	var _collecion = conn.GetCollection("coleccion")
 
@@ -127,7 +141,8 @@ func EditarColeccion(key primitive.ObjectID, upColecc ColeccionFormulario) (*Col
 	if err != nil {
 		return nil, err
 	} else {
-		coleccion, err := VerColeccion(key)
+		var coleccion *Coleccion
+		err := coleccion.Ver(key)
 
 		if err != nil {
 			return nil, err
@@ -136,16 +151,4 @@ func EditarColeccion(key primitive.ObjectID, upColecc ColeccionFormulario) (*Col
 		}
 	}
 
-}
-func EliminarColeccion(key primitive.ObjectID) error {
-
-	var _collecion = conn.GetCollection("coleccion")
-
-	filter := bson.M{"_id": key}
-	_, err := _collecion.DeleteOne(context.TODO(), filter)
-	if err != nil {
-		return err
-	} else {
-		return nil
-	}
 }

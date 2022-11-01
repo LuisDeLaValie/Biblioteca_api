@@ -15,7 +15,7 @@ type Autor struct {
 
 type ListAutor []*Autor
 
-func CrearAutor(autor Autor) (*Autor, error) {
+func (autor *Autor) Crear() error {
 	var _ctx = context.Background()
 	var _collecion = conn.GetCollection("autor")
 
@@ -23,16 +23,15 @@ func CrearAutor(autor Autor) (*Autor, error) {
 	oid, err := _collecion.InsertOne(_ctx, autor)
 
 	if err == nil {
-		nuevoAutor := VerAutor(oid.InsertedID.(primitive.ObjectID))
-		return nuevoAutor, nil
-
+		autor.Key = oid.InsertedID.(primitive.ObjectID)
+		return nil
 	} else {
-		return nil, err
+		return err
 	}
 }
 
 /// Listar todos los sibros
-func ListarAutor() (ListAutor, error) {
+func (autor Autor) Listar() (ListAutor, error) {
 	var _ctx = context.Background()
 	var _collecion = conn.GetCollection("autor")
 
@@ -56,20 +55,16 @@ func ListarAutor() (ListAutor, error) {
 		return nil, err
 	}
 }
-
-func VerAutor(key primitive.ObjectID) *Autor {
+func (autor Autor) Ver(key primitive.ObjectID) {
 	var _ctx = context.Background()
 	var _collecion = conn.GetCollection("autor")
 
 	filter := bson.M{"_id": key}
 	result := _collecion.FindOne(_ctx, filter)
 
-	var autor *Autor
 	result.Decode(&autor)
-	return autor
 }
-
-func EditarAutor(key primitive.ObjectID, upAutor Autor) (*Autor, error) {
+func (upAutor *Autor) Editar(key primitive.ObjectID) error {
 	var _ctx = context.Background()
 	var _collecion = conn.GetCollection("autor")
 
@@ -82,14 +77,13 @@ func EditarAutor(key primitive.ObjectID, upAutor Autor) (*Autor, error) {
 
 	_, err := _collecion.UpdateOne(_ctx, filtter, update)
 	if err != nil {
-		return nil, err
+		return err
 	} else {
-		autor := VerAutor(key)
-		return autor, nil
+		upAutor.Key = key
+		return nil
 	}
-
 }
-func EliminarAutor(key primitive.ObjectID) error {
+func (autor Autor) Eliminar(key primitive.ObjectID) error {
 
 	var _collecion = conn.GetCollection("autor")
 
