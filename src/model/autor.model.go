@@ -17,8 +17,12 @@ type ListAutor []*Autor
 
 func (autor *Autor) Crear() error {
 	var _ctx = context.Background()
-	var _collecion = conn.GetCollection("autor")
-
+	var con conn.Mongodb
+	var _collecion = con.GetCollection("autor")
+	defer func() {
+		con.Close()
+		_ctx.Done()
+	}()
 	// Insertar Libro
 	oid, err := _collecion.InsertOne(_ctx, autor)
 
@@ -33,8 +37,12 @@ func (autor *Autor) Crear() error {
 /// Listar todos los sibros
 func (autor Autor) Listar() (ListAutor, error) {
 	var _ctx = context.Background()
-	var _collecion = conn.GetCollection("autor")
-
+	var con conn.Mongodb
+	var _collecion = con.GetCollection("autor")
+	defer func() {
+		con.Close()
+		_ctx.Done()
+	}()
 	var autores ListAutor
 
 	filter := bson.M{}
@@ -57,8 +65,12 @@ func (autor Autor) Listar() (ListAutor, error) {
 }
 func (autor Autor) Ver(key primitive.ObjectID) {
 	var _ctx = context.Background()
-	var _collecion = conn.GetCollection("autor")
-
+	var con conn.Mongodb
+	var _collecion = con.GetCollection("autor")
+	defer func() {
+		con.Close()
+		_ctx.Done()
+	}()
 	filter := bson.M{"_id": key}
 	result := _collecion.FindOne(_ctx, filter)
 
@@ -66,8 +78,12 @@ func (autor Autor) Ver(key primitive.ObjectID) {
 }
 func (upAutor *Autor) Editar(key primitive.ObjectID) error {
 	var _ctx = context.Background()
-	var _collecion = conn.GetCollection("autor")
-
+	var con conn.Mongodb
+	var _collecion = con.GetCollection("autor")
+	defer func() {
+		con.Close()
+		_ctx.Done()
+	}()
 	filtter := bson.M{"_id": key}
 	update := bson.M{
 		"$set": bson.M{
@@ -85,7 +101,11 @@ func (upAutor *Autor) Editar(key primitive.ObjectID) error {
 }
 func (autor Autor) Eliminar(key primitive.ObjectID) error {
 
-	var _collecion = conn.GetCollection("autor")
+	var con conn.Mongodb
+	var _collecion = con.GetCollection("autor")
+	defer func() {
+		con.Close()
+	}()
 
 	filter := bson.M{"_id": key}
 	_, err := _collecion.DeleteOne(context.TODO(), filter)

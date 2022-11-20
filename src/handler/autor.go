@@ -18,7 +18,7 @@ func ListarAutores(w http.ResponseWriter, r *http.Request) {
 	colecciones, err := a.Listar()
 
 	if err != nil {
-		cerror := ErrorRes{Error: "Error obteniendo los datos", Cuerpo: err, Mensaje: err.Error()}
+		cerror := m.ErrorRes{Error: "Error obteniendo los datos", Cuerpo: err, Mensaje: err.Error()}
 		json.NewEncoder(w).Encode(cerror)
 	}
 	json.NewEncoder(w).Encode(colecciones)

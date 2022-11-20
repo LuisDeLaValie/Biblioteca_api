@@ -17,23 +17,31 @@ var (
 	database = "Libreria"
 )
 
-func GetCollection(coll string) *mongo.Collection {
-	// uri := os.Getenv("MONGODB_URI")
+type Mongodb struct {
+	client *mongo.Client
+}
+
+func (db *Mongodb) GetCollection(coll string) *mongo.Collection {
+
 	uri := fmt.Sprintf("mongodb://%s:%s@%s:%d", usr, pwd, host, port)
-	// uri := fmt.Sprintf("mongodb://%s:%d",host,port)
-	client, err := mongo.NewClient(options.Client().ApplyURI(uri))
 
-	if err != nil {
+	var err error
+
+	if db.client, err = mongo.NewClient(options.Client().ApplyURI(uri)); err == nil {
+		ctx, c := context.WithTimeout(context.Background(), 10*time.Second)
+		defer c()
+		if err = db.client.Connect(ctx); err != nil {
+			panic(err.Error())
+		}
+
+		return db.client.Database(database).Collection(coll)
+	} else {
+
 		panic(err.Error())
 	}
 
-	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	err = client.Connect(ctx)
+}
 
-	if err != nil {
-		panic(err.Error())
-	}
-
-	return client.Database(database).Collection(coll)
-
+func (db *Mongodb) Close() {
+	db.client.Disconnect(context.Background())
 }
