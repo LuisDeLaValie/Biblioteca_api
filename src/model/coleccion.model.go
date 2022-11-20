@@ -24,8 +24,12 @@ type ListColeccion []*Coleccion
 /// Listar todos los sibros
 func (coll Coleccion) Listar() (ListColeccion, error) {
 	var _ctx = context.Background()
-	var _collecion = conn.GetCollection("coleccion")
-
+	var con conn.Mongodb
+	var _collecion = con.GetCollection("coleccion")
+	defer func() {
+		con.Close()
+		_ctx.Done()
+	}()
 	var colecciones ListColeccion
 
 	lookupStage := bson.D{{Key: "$lookup", Value: bson.D{{Key: "from", Value: "libros"}, {Key: "localField", Value: "libros"}, {Key: "foreignField", Value: "_id"}, {Key: "as", Value: "libros"}}}}
@@ -53,8 +57,12 @@ func (coll Coleccion) Listar() (ListColeccion, error) {
 
 func (coll *Coleccion) Ver(key primitive.ObjectID) error {
 	var _ctx = context.Background()
-	var _collecion = conn.GetCollection("coleccion")
-
+	var con conn.Mongodb
+	var _collecion = con.GetCollection("coleccion")
+	defer func() {
+		con.Close()
+		_ctx.Done()
+	}()
 	// filros para traer el libro
 	lookupStage := bson.D{{Key: "$lookup", Value: bson.D{{Key: "from", Value: "libros"}, {Key: "localField", Value: "libros"}, {Key: "foreignField", Value: "_id"}, {Key: "as", Value: "libros"}}}}
 	machtState := bson.D{{Key: "$match", Value: bson.D{{Key: "_id", Value: key}}}}
@@ -79,8 +87,11 @@ func (coll *Coleccion) Ver(key primitive.ObjectID) error {
 
 func (coll Coleccion) Eliminar(key primitive.ObjectID) error {
 
-	var _collecion = conn.GetCollection("coleccion")
-
+	var con conn.Mongodb
+	var _collecion = con.GetCollection("coleccion")
+	defer func() {
+		con.Close()
+	}()
 	filter := bson.M{"_id": key}
 	_, err := _collecion.DeleteOne(context.TODO(), filter)
 	if err != nil {
@@ -100,8 +111,12 @@ type ColeccionFormulario struct {
 
 func (coleccion *ColeccionFormulario) Crear() (*Coleccion, error) {
 	var _ctx = context.Background()
-	var _collecion = conn.GetCollection("coleccion")
-
+	var con conn.Mongodb
+	var _collecion = con.GetCollection("coleccion")
+	defer func() {
+		con.Close()
+		_ctx.Done()
+	}()
 	// Preparar datos del formulario
 	coleccion.Creado = time.Now()
 
@@ -125,8 +140,13 @@ func (coleccion *ColeccionFormulario) Crear() (*Coleccion, error) {
 
 func (upColecc *ColeccionFormulario) Editar(key primitive.ObjectID) (*Coleccion, error) {
 	var _ctx = context.Background()
-	var _collecion = conn.GetCollection("coleccion")
 
+	var con conn.Mongodb
+	var _collecion = con.GetCollection("coleccion")
+	defer func() {
+		con.Close()
+		_ctx.Done()
+	}()
 	filtter := bson.M{"_id": key}
 	update := bson.M{
 		"$set": bson.M{
