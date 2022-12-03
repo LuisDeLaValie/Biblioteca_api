@@ -7,10 +7,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -27,10 +27,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -47,10 +47,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -67,10 +67,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -87,10 +87,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -107,10 +107,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -127,10 +127,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -147,10 +147,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -167,10 +167,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -187,10 +187,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -207,10 +207,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -227,10 +227,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -247,10 +247,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -267,10 +267,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -287,10 +287,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -307,10 +307,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -327,10 +327,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -347,10 +347,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -367,10 +367,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -388,10 +388,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -408,10 +408,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -428,10 +428,10 @@ db.libros.insertMany([
             ObjectId("63514e5fdcb2c4cbccd0b0ab"),
             ObjectId("63514e5fdcb2c4cbccd0b0ac")
         ],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -445,10 +445,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/162ydD1pi4TOaogra9f6SvoB9RU_068rk?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ad")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -462,10 +462,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/162ydD1pi4TOaogra9f6SvoB9RU_068rk?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ad")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -479,10 +479,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/162ydD1pi4TOaogra9f6SvoB9RU_068rk?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ad")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -496,10 +496,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/162ydD1pi4TOaogra9f6SvoB9RU_068rk?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ad")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -513,10 +513,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/162ydD1pi4TOaogra9f6SvoB9RU_068rk?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ad")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -530,10 +530,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/162ydD1pi4TOaogra9f6SvoB9RU_068rk?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ad")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -547,10 +547,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/162ydD1pi4TOaogra9f6SvoB9RU_068rk?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ad")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -564,10 +564,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -581,10 +581,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -598,10 +598,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -615,10 +615,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -632,10 +632,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -649,10 +649,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -666,10 +666,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -683,10 +683,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -700,10 +700,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -717,10 +717,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -735,10 +735,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -752,10 +752,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -769,10 +769,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -786,10 +786,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -803,10 +803,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -820,10 +820,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -837,10 +837,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -854,10 +854,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -871,10 +871,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -888,10 +888,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1KfZbdRCbgwbdk4g9TFWemlgwNpKdXm-V?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0ae")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -905,10 +905,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/11SY0vrvw69fDjkCqreAKMUdDrwWX4_GN?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -922,10 +922,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/11SY0vrvw69fDjkCqreAKMUdDrwWX4_GN?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -939,10 +939,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/11SY0vrvw69fDjkCqreAKMUdDrwWX4_GN?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -956,10 +956,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/11SY0vrvw69fDjkCqreAKMUdDrwWX4_GN?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -973,10 +973,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/11SY0vrvw69fDjkCqreAKMUdDrwWX4_GN?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -990,10 +990,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/11SY0vrvw69fDjkCqreAKMUdDrwWX4_GN?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -1007,10 +1007,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/11SY0vrvw69fDjkCqreAKMUdDrwWX4_GN?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -1024,10 +1024,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/11SY0vrvw69fDjkCqreAKMUdDrwWX4_GN?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -1041,10 +1041,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/11SY0vrvw69fDjkCqreAKMUdDrwWX4_GN?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -1058,10 +1058,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/11SY0vrvw69fDjkCqreAKMUdDrwWX4_GN?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -1076,10 +1076,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/11SY0vrvw69fDjkCqreAKMUdDrwWX4_GN?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -1093,10 +1093,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/11SY0vrvw69fDjkCqreAKMUdDrwWX4_GN?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -1110,10 +1110,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/11SY0vrvw69fDjkCqreAKMUdDrwWX4_GN?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -1127,10 +1127,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1OWrmLzsFOMNPxq79-KdAW1s-ytXuw8ov?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -1144,10 +1144,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1OWrmLzsFOMNPxq79-KdAW1s-ytXuw8ov?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -1161,10 +1161,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1OWrmLzsFOMNPxq79-KdAW1s-ytXuw8ov?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -1178,10 +1178,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1OWrmLzsFOMNPxq79-KdAW1s-ytXuw8ov?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -1195,10 +1195,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1OWrmLzsFOMNPxq79-KdAW1s-ytXuw8ov?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -1212,10 +1212,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1OWrmLzsFOMNPxq79-KdAW1s-ytXuw8ov?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -1229,10 +1229,10 @@ db.libros.insertMany([
         sinopsis: "",
         path: "https://drive.google.com/drive/folders/1OWrmLzsFOMNPxq79-KdAW1s-ytXuw8ov?usp=sharing",
         autor: [ObjectId("63514e5fdcb2c4cbccd0b0af")],
-        editorial:"",
-        paginacion:{
+        editorial: "",
+        paginacion: {
             to: NumberInt(1),
-            end:NumberInt(1)
+            end: NumberInt(1)
         },
         origen: {
             nombre: "",
@@ -1242,3 +1242,27 @@ db.libros.insertMany([
         creado: ISODate("2022-10-09T03:55:49.578Z")
     }
 ])
+
+db.libros.aggregate([
+    {
+        $lookup: {
+            from: "coleccion",
+            localField: "_id",
+            foreignField: "libros.id",
+            as: "nada"
+        }
+    }, {
+        $match: { nada: { $size: 0 } }
+    }, {
+        $lookup: {
+            from: "autor",
+            localField: "autor",
+            foreignField: "_id",
+            as: "autores"
+        }
+    },{
+        $project: {
+            autor:false
+        }
+    }
+]).pretty()

@@ -22,7 +22,7 @@ type Coleccion struct {
 type ListColeccion []*Coleccion
 
 /// Listar todos los sibros
-func (coll Coleccion) Listar() (ListColeccion, error) {
+func (coll Coleccion) Listar(search string) (ListColeccion, error) {
 	var _ctx = context.Background()
 	var con conn.Mongodb
 	var _collecion = con.GetCollection("coleccion")
@@ -31,11 +31,20 @@ func (coll Coleccion) Listar() (ListColeccion, error) {
 		_ctx.Done()
 	}()
 	var colecciones ListColeccion
-
+	matchesSearch := bson.D{}
+	if search != "" {
+		matchesSearch = bson.D{
+			{Key: "titulo", Value: primitive.Regex{
+				Pattern: search,
+				Options: "i",
+			}},
+		}
+	}
 	lookupStage := bson.D{{Key: "$lookup", Value: bson.D{{Key: "from", Value: "libros"}, {Key: "localField", Value: "libros"}, {Key: "foreignField", Value: "_id"}, {Key: "as", Value: "libros"}}}}
-	// projectStage := bson.D{{Key: "$project", Value: bson.D{{Key: "autor", Value: false}}}}
-
-	cur, err := _collecion.Aggregate(_ctx, mongo.Pipeline{lookupStage})
+	matchStage := bson.D{
+		{Key: "$match", Value: matchesSearch},
+	}
+	cur, err := _collecion.Aggregate(_ctx, mongo.Pipeline{lookupStage, matchStage})
 
 	if err == nil {
 		for cur.Next(_ctx) {

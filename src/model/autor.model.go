@@ -35,7 +35,7 @@ func (autor *Autor) Crear() error {
 }
 
 /// Listar todos los sibros
-func (autor Autor) Listar() (ListAutor, error) {
+func (autor Autor) Listar(search string) (ListAutor, error) {
 	var _ctx = context.Background()
 	var con conn.Mongodb
 	var _collecion = con.GetCollection("autor")
@@ -45,8 +45,19 @@ func (autor Autor) Listar() (ListAutor, error) {
 	}()
 	var autores ListAutor
 
-	filter := bson.M{}
-	cur, err := _collecion.Find(_ctx, filter)
+	matchesSearch := bson.D{}
+	if search != "" {
+		matchesSearch = bson.D{
+			{Key: "titulo", Value: primitive.Regex{
+				Pattern: search,
+				Options: "i",
+			}},
+		}
+	}
+	matchStage := bson.D{
+		{Key: "$match", Value: matchesSearch},
+	}
+	cur, err := _collecion.Find(_ctx, matchStage)
 
 	if err == nil {
 		for cur.Next(_ctx) {
