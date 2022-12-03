@@ -15,7 +15,9 @@ import (
 func ListarColecciones(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var col m.Coleccion
-	colecciones, err := col.Listar()
+	search := r.URL.Query().Get("search")
+
+	colecciones, err := col.Listar(search)
 
 	if err != nil {
 		cerror := m.ErrorRes{Error: "Error obteniendo los datos", Cuerpo: err, Mensaje: err.Error()}

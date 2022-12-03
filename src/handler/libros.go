@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 
 	m "libreria/src/model"
 
@@ -21,7 +22,10 @@ func ListarLibros(w http.ResponseWriter, r *http.Request) {
 
 	var l m.Libro
 	id := r.URL.Query().Get("search")
-	libros := l.Listar(id)
+	_only := r.URL.Query().Get("only")
+	only, _ := strconv.ParseBool(_only)
+
+	libros := l.Listar(id, only)
 	json.NewEncoder(w).Encode(libros)
 }
 func VerLibro(w http.ResponseWriter, r *http.Request) {
@@ -58,9 +62,13 @@ func CrearLibro(w http.ResponseWriter, r *http.Request) {
 	} else {
 		// Preparar formulario y mandar la informacion
 		var libro m.LibroFormulario
-		json.Unmarshal(reqBody, &libro)
-		nuevoLibro := libro.Crear()
-		json.NewEncoder(w).Encode(nuevoLibro)
+		if err = json.Unmarshal(reqBody, &libro); err == nil {
+			nuevoLibro := libro.Crear()
+			json.NewEncoder(w).Encode(nuevoLibro)
+		} else {
+			json.NewEncoder(w).Encode(err.Error())
+
+		}
 
 	}
 }

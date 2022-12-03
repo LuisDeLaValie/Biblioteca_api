@@ -18,13 +18,12 @@ type ListAutor []*Autor
 func (autor *Autor) Crear() error {
 	var _ctx = context.Background()
 	var con conn.Mongodb
-	var _collecion = con.GetCollection("autor")
 	defer func() {
 		con.Close()
 		_ctx.Done()
 	}()
 	// Insertar Libro
-	oid, err := _collecion.InsertOne(_ctx, autor)
+	oid, err := con.GetCollection("autor").InsertOne(_ctx, autor)
 
 	if err == nil {
 		autor.Key = oid.InsertedID.(primitive.ObjectID)
@@ -35,18 +34,28 @@ func (autor *Autor) Crear() error {
 }
 
 /// Listar todos los sibros
-func (autor Autor) Listar() (ListAutor, error) {
+func (autor Autor) Listar(search string) (ListAutor, error) {
 	var _ctx = context.Background()
 	var con conn.Mongodb
-	var _collecion = con.GetCollection("autor")
 	defer func() {
 		con.Close()
 		_ctx.Done()
 	}()
 	var autores ListAutor
 
-	filter := bson.M{}
-	cur, err := _collecion.Find(_ctx, filter)
+	matchesSearch := bson.D{}
+	if search != "" {
+		matchesSearch = bson.D{
+			{
+				Key: "nombre", Value: primitive.Regex{
+					Pattern: search,
+					Options: "i",
+				},
+			},
+		}
+	}
+
+	cur, err := con.GetCollection("autor").Find(_ctx, matchesSearch)
 
 	if err == nil {
 		for cur.Next(_ctx) {
@@ -63,23 +72,21 @@ func (autor Autor) Listar() (ListAutor, error) {
 		return nil, err
 	}
 }
-func (autor Autor) Ver(key primitive.ObjectID) {
+func (autor *Autor) Ver(key primitive.ObjectID) {
 	var _ctx = context.Background()
 	var con conn.Mongodb
-	var _collecion = con.GetCollection("autor")
 	defer func() {
 		con.Close()
 		_ctx.Done()
 	}()
 	filter := bson.M{"_id": key}
-	result := _collecion.FindOne(_ctx, filter)
+	result := con.GetCollection("autor").FindOne(_ctx, filter)
 
 	result.Decode(&autor)
 }
 func (upAutor *Autor) Editar(key primitive.ObjectID) error {
 	var _ctx = context.Background()
 	var con conn.Mongodb
-	var _collecion = con.GetCollection("autor")
 	defer func() {
 		con.Close()
 		_ctx.Done()
@@ -91,7 +98,7 @@ func (upAutor *Autor) Editar(key primitive.ObjectID) error {
 		},
 	}
 
-	_, err := _collecion.UpdateOne(_ctx, filtter, update)
+	_, err := con.GetCollection("autor").UpdateOne(_ctx, filtter, update)
 	if err != nil {
 		return err
 	} else {
@@ -102,13 +109,12 @@ func (upAutor *Autor) Editar(key primitive.ObjectID) error {
 func (autor Autor) Eliminar(key primitive.ObjectID) error {
 
 	var con conn.Mongodb
-	var _collecion = con.GetCollection("autor")
 	defer func() {
 		con.Close()
 	}()
 
 	filter := bson.M{"_id": key}
-	_, err := _collecion.DeleteOne(context.TODO(), filter)
+	_, err := con.GetCollection("autor").DeleteOne(context.TODO(), filter)
 	if err != nil {
 		return err
 	} else {

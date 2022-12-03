@@ -2,6 +2,7 @@ package model
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -29,7 +30,7 @@ type Libro struct {
 	Autores    []Autor            `json:"autores,omitempty"`
 	Editorail  string             `json:"editorial,omitempty"`
 	Descargar  string             `json:"descargar,omitempty"`
-	Path       string             `json:"-,omitempty"`
+	Path       string             `json:"-"`
 	Verr       string             `json:"ver,omitempty"`
 	Paginacion _Paginacions       `json:"paginacion,omitempty"`
 	Origen     origen             `json:"origen,omitempty"`
@@ -39,31 +40,98 @@ type Libro struct {
 type ListLibros []*Libro
 
 /// Listar todos los sibros
-func (l Libro) Listar(search string) ListLibros {
+func (l Libro) Listar(search string, all bool) ListLibros {
 	var _ctx = context.Background()
 	var con conn.Mongodb
-	var _collecion = con.GetCollection("libros")
 	defer func() {
 		con.Close()
 		_ctx.Done()
 	}()
-	var libros ListLibros
 
-	matches := bson.D{}
+	libros := ListLibros{}
+	var pipeline mongo.Pipeline
+
+	matchesSearch := bson.D{}
 	if search != "" {
-		matches = append(matches, bson.E{Key: "titulo", Value: "/" + search + "/i"})
+		matchesSearch = bson.D{
+			{
+				Key: "$or", Value: []interface{}{
+					bson.D{
+						{
+							Key: "titulo", Value: primitive.Regex{
+								Pattern: search,
+								Options: "i",
+							},
+						},
+					},
+					bson.D{
+						{
+							Key: "autores.nombre", Value: primitive.Regex{
+								Pattern: search,
+								Options: "i",
+							},
+						},
+					},
+				},
+			},
+		}
+	}
+	lookupStage := bson.D{
+		{
+			Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "autor"},
+				{Key: "localField", Value: "autor"},
+				{Key: "foreignField", Value: "_id"},
+				{Key: "as", Value: "autores"},
+			},
+		},
+	}
+	projectStage := bson.D{
+		{
+			Key: "$project", Value: bson.D{
+				{Key: "autor", Value: false},
+			},
+		},
+	}
+	matchStage := bson.D{
+		{Key: "$match", Value: matchesSearch},
 	}
 
-	lookupStage := bson.D{{Key: "$lookup", Value: bson.D{{Key: "from", Value: "autor"}, {Key: "localField", Value: "autor"}, {Key: "foreignField", Value: "_id"}, {Key: "as", Value: "autores"}}}}
-	projectStage := bson.D{{Key: "$project", Value: bson.D{{Key: "autor", Value: false}}}}
-	matchStage := bson.D{{Key: "$match", Value: matches}}
+	if !all {
+		pipeline = mongo.Pipeline{lookupStage, projectStage, matchStage}
+	} else {
+		// left joint
+		lookupStageFilter := bson.D{
+			{
+				Key: "$lookup", Value: bson.D{
+					{Key: "from", Value: "coleccion"},
+					{Key: "localField", Value: "_id"},
+					{Key: "foreignField", Value: "libros.id"},
+					{Key: "as", Value: "nada"},
+				},
+			},
+		}
+		matchStageFilter := bson.D{
+			{
+				Key: "$match", Value: bson.D{
+					{
+						Key: "nada", Value: bson.D{
+							{Key: "$size", Value: 0},
+						},
+					},
+				},
+			},
+		}
+		pipeline = mongo.Pipeline{lookupStageFilter, matchStageFilter, lookupStage, projectStage, matchStage}
+	}
 
-	cur, err := _collecion.Aggregate(_ctx, mongo.Pipeline{lookupStage, projectStage, matchStage})
+	cur, err := con.GetCollection("libros").Aggregate(_ctx, pipeline)
+
 	if err != nil {
 		panic(ErrorRes{Cuerpo: err, Mensaje: err.Error()})
 	}
-
 	for cur.Next(_ctx) {
+
 		var aux Libro
 		err = cur.Decode(&aux)
 
@@ -78,7 +146,6 @@ func (l Libro) Listar(search string) ListLibros {
 func (l *Libro) Ver(key primitive.ObjectID) {
 	var _ctx = context.Background()
 	var con conn.Mongodb
-	var _collecion = con.GetCollection("libros")
 	defer func() {
 		con.Close()
 		_ctx.Done()
@@ -90,7 +157,7 @@ func (l *Libro) Ver(key primitive.ObjectID) {
 	machtState := bson.D{{Key: "$match", Value: bson.D{{Key: "_id", Value: key}}}}
 	limtState := bson.D{{Key: "$limit", Value: 1}}
 
-	cur, err := _collecion.Aggregate(_ctx, mongo.Pipeline{lookupStage, projectStage, machtState, limtState})
+	cur, err := con.GetCollection("libros").Aggregate(_ctx, mongo.Pipeline{lookupStage, projectStage, machtState, limtState})
 
 	if err != nil {
 		panic(ErrorRes{Error: "Error al buscar datos", Cuerpo: err, Mensaje: err.Error()})
@@ -109,12 +176,11 @@ func (l *Libro) Ver(key primitive.ObjectID) {
 func (l *Libro) Eliminar(key primitive.ObjectID) error {
 
 	var con conn.Mongodb
-	var _collecion = con.GetCollection("libros")
 	defer func() {
 		con.Close()
 	}()
 	filter := bson.M{"_id": key}
-	_, err := _collecion.DeleteOne(context.TODO(), filter)
+	_, err := con.GetCollection("libros").DeleteOne(context.TODO(), filter)
 	if err != nil {
 		return err
 	} else {
@@ -160,16 +226,13 @@ type LibroFormulario struct {
 	Origen     origen               `json:"origen" bson:"origen"`
 	Path       string               `json:"path,omitempty" bson:"path,omitempty"`
 	Creado     time.Time            `json:"creado,omitempty" bson:"creado,omitempty"`
-	Paginacion _Paginacions         `json:"_,omitempty" bson:"paginacion,omitempty"`
+	Paginacion _Paginacions         `json:"-" bson:"paginacion,omitempty"`
 }
 
 func (libro *LibroFormulario) Crear() Libro {
-	var _ctx = context.Background()
 	var con conn.Mongodb
-	var _collecion = con.GetCollection("libros")
 	defer func() {
 		con.Close()
-		_ctx.Done()
 	}()
 	var nuevoLibro Libro
 
@@ -177,8 +240,10 @@ func (libro *LibroFormulario) Crear() Libro {
 	libro.Creado = time.Now()
 	libro.Paginacion = _Paginacions{0, libro.Paginas}
 
+	fmt.Print(libro)
+
 	// Insertar Libro
-	oid, err := _collecion.InsertOne(_ctx, libro)
+	oid, err := con.GetCollection("libros").InsertOne(context.TODO(), libro)
 	if err != nil {
 		panic(ErrorRes{Cuerpo: err, Mensaje: err.Error()})
 	}
@@ -186,13 +251,11 @@ func (libro *LibroFormulario) Crear() Libro {
 	nuevoLibro.Ver(oid.InsertedID.(primitive.ObjectID))
 	return nuevoLibro
 }
+
 func (upLibro *LibroFormulario) Editar(key primitive.ObjectID) Libro {
-	var _ctx = context.Background()
 	var con conn.Mongodb
-	var _collecion = con.GetCollection("libros")
 	defer func() {
 		con.Close()
-		_ctx.Done()
 	}()
 	var libro Libro
 
@@ -209,12 +272,11 @@ func (upLibro *LibroFormulario) Editar(key primitive.ObjectID) Libro {
 		},
 	}
 
-	_, err := _collecion.UpdateOne(_ctx, filtter, update)
+	_, err := con.GetCollection("libros").UpdateOne(context.TODO(), filtter, update)
 	if err != nil {
 		panic(ErrorRes{Cuerpo: err, Mensaje: err.Error()})
 	}
 
 	libro.Ver(key)
 	return libro
-
 }

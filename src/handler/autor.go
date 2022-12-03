@@ -15,7 +15,10 @@ import (
 func ListarAutores(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var a m.Autor
-	colecciones, err := a.Listar()
+
+	search := r.URL.Query().Get("search")
+
+	colecciones, err := a.Listar(search)
 
 	if err != nil {
 		cerror := m.ErrorRes{Error: "Error obteniendo los datos", Cuerpo: err, Mensaje: err.Error()}

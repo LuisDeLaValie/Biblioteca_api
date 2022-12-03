@@ -22,20 +22,28 @@ type Coleccion struct {
 type ListColeccion []*Coleccion
 
 /// Listar todos los sibros
-func (coll Coleccion) Listar() (ListColeccion, error) {
+func (coll Coleccion) Listar(search string) (ListColeccion, error) {
 	var _ctx = context.Background()
 	var con conn.Mongodb
-	var _collecion = con.GetCollection("coleccion")
 	defer func() {
 		con.Close()
 		_ctx.Done()
 	}()
 	var colecciones ListColeccion
-
+	matchesSearch := bson.D{}
+	if search != "" {
+		matchesSearch = bson.D{
+			{Key: "titulo", Value: primitive.Regex{
+				Pattern: search,
+				Options: "i",
+			}},
+		}
+	}
 	lookupStage := bson.D{{Key: "$lookup", Value: bson.D{{Key: "from", Value: "libros"}, {Key: "localField", Value: "libros"}, {Key: "foreignField", Value: "_id"}, {Key: "as", Value: "libros"}}}}
-	// projectStage := bson.D{{Key: "$project", Value: bson.D{{Key: "autor", Value: false}}}}
-
-	cur, err := _collecion.Aggregate(_ctx, mongo.Pipeline{lookupStage})
+	matchStage := bson.D{
+		{Key: "$match", Value: matchesSearch},
+	}
+	cur, err := con.GetCollection("coleccion").Aggregate(_ctx, mongo.Pipeline{lookupStage, matchStage})
 
 	if err == nil {
 		for cur.Next(_ctx) {
@@ -58,22 +66,29 @@ func (coll Coleccion) Listar() (ListColeccion, error) {
 func (coll *Coleccion) Ver(key primitive.ObjectID) error {
 	var _ctx = context.Background()
 	var con conn.Mongodb
-	var _collecion = con.GetCollection("coleccion")
 	defer func() {
 		con.Close()
 		_ctx.Done()
 	}()
 	// filros para traer el libro
-	lookupStage := bson.D{{Key: "$lookup", Value: bson.D{{Key: "from", Value: "libros"}, {Key: "localField", Value: "libros"}, {Key: "foreignField", Value: "_id"}, {Key: "as", Value: "libros"}}}}
+	lookupStage := bson.D{
+		{
+			Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "libros"},
+				{Key: "localField", Value: "libros.id"},
+				{Key: "foreignField", Value: "_id"},
+				{Key: "as", Value: "libros"},
+			},
+		},
+	}
 	machtState := bson.D{{Key: "$match", Value: bson.D{{Key: "_id", Value: key}}}}
 	limtState := bson.D{{Key: "$limit", Value: 1}}
 
-	cur, err := _collecion.Aggregate(_ctx, mongo.Pipeline{lookupStage, machtState, limtState})
+	cur, err := con.GetCollection("coleccion").Aggregate(_ctx, mongo.Pipeline{lookupStage, machtState, limtState})
 
 	if err == nil {
-		var coleccion *Coleccion
 		cur.Next(_ctx)
-		err = cur.Decode(&coleccion)
+		err = cur.Decode(&coll)
 
 		if err == nil {
 			return nil
@@ -88,12 +103,11 @@ func (coll *Coleccion) Ver(key primitive.ObjectID) error {
 func (coll Coleccion) Eliminar(key primitive.ObjectID) error {
 
 	var con conn.Mongodb
-	var _collecion = con.GetCollection("coleccion")
 	defer func() {
 		con.Close()
 	}()
 	filter := bson.M{"_id": key}
-	_, err := _collecion.DeleteOne(context.TODO(), filter)
+	_, err := con.GetCollection("coleccion").DeleteOne(context.TODO(), filter)
 	if err != nil {
 		return err
 	} else {
@@ -112,7 +126,6 @@ type ColeccionFormulario struct {
 func (coleccion *ColeccionFormulario) Crear() (*Coleccion, error) {
 	var _ctx = context.Background()
 	var con conn.Mongodb
-	var _collecion = con.GetCollection("coleccion")
 	defer func() {
 		con.Close()
 		_ctx.Done()
@@ -121,16 +134,18 @@ func (coleccion *ColeccionFormulario) Crear() (*Coleccion, error) {
 	coleccion.Creado = time.Now()
 
 	// Insertar Libro
-	oid, err := _collecion.InsertOne(_ctx, coleccion)
+	oid, err := con.GetCollection("coleccion").InsertOne(_ctx, coleccion)
 
 	if err == nil {
-		var nuevaColeccion *Coleccion
-		err := nuevaColeccion.Ver(oid.InsertedID.(primitive.ObjectID))
+
+		id := oid.InsertedID.(primitive.ObjectID)
+		var col Coleccion
+		err := col.Ver(id)
 
 		if err != nil {
 			return nil, err
 		} else {
-			return nuevaColeccion, nil
+			return &col, nil
 		}
 
 	} else {
@@ -142,7 +157,6 @@ func (upColecc *ColeccionFormulario) Editar(key primitive.ObjectID) (*Coleccion,
 	var _ctx = context.Background()
 
 	var con conn.Mongodb
-	var _collecion = con.GetCollection("coleccion")
 	defer func() {
 		con.Close()
 		_ctx.Done()
@@ -157,17 +171,17 @@ func (upColecc *ColeccionFormulario) Editar(key primitive.ObjectID) (*Coleccion,
 		},
 	}
 
-	_, err := _collecion.UpdateOne(_ctx, filtter, update)
+	_, err := con.GetCollection("coleccion").UpdateOne(_ctx, filtter, update)
 	if err != nil {
 		return nil, err
 	} else {
-		var coleccion *Coleccion
+		var coleccion Coleccion
 		err := coleccion.Ver(key)
 
 		if err != nil {
 			return nil, err
 		} else {
-			return coleccion, nil
+			return &coleccion, nil
 		}
 	}
 
