@@ -1243,26 +1243,13 @@ db.libros.insertMany([
     }
 ])
 
-db.libros.aggregate([
+db.coleccion.aggregate([
     {
         $lookup: {
-            from: "coleccion",
-            localField: "_id",
-            foreignField: "libros.id",
-            as: "nada"
-        }
-    }, {
-        $match: { nada: { $size: 0 } }
-    }, {
-        $lookup: {
-            from: "autor",
-            localField: "autor",
+            from: "libros",
+            localField: "libros.id",
             foreignField: "_id",
-            as: "autores"
+            as: "libros"
         }
-    },{
-        $project: {
-            autor:false
-        }
-    }
+    },
 ]).pretty()
