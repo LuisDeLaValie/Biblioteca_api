@@ -2,6 +2,7 @@ package model
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -225,7 +226,7 @@ type LibroFormulario struct {
 	Origen     origen               `json:"origen" bson:"origen"`
 	Path       string               `json:"path,omitempty" bson:"path,omitempty"`
 	Creado     time.Time            `json:"creado,omitempty" bson:"creado,omitempty"`
-	Paginacion _Paginacions         `json:"_,omitempty" bson:"paginacion,omitempty"`
+	Paginacion _Paginacions         `json:"-" bson:"paginacion,omitempty"`
 }
 
 func (libro *LibroFormulario) Crear() Libro {
@@ -238,6 +239,8 @@ func (libro *LibroFormulario) Crear() Libro {
 	// Preparar datos del formulario
 	libro.Creado = time.Now()
 	libro.Paginacion = _Paginacions{0, libro.Paginas}
+
+	fmt.Print(libro)
 
 	// Insertar Libro
 	oid, err := con.GetCollection("libros").InsertOne(context.TODO(), libro)

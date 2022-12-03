@@ -62,9 +62,13 @@ func CrearLibro(w http.ResponseWriter, r *http.Request) {
 	} else {
 		// Preparar formulario y mandar la informacion
 		var libro m.LibroFormulario
-		json.Unmarshal(reqBody, &libro)
-		nuevoLibro := libro.Crear()
-		json.NewEncoder(w).Encode(nuevoLibro)
+		if err = json.Unmarshal(reqBody, &libro); err == nil {
+			nuevoLibro := libro.Crear()
+			json.NewEncoder(w).Encode(nuevoLibro)
+		} else {
+			json.NewEncoder(w).Encode(err.Error())
+
+		}
 
 	}
 }
