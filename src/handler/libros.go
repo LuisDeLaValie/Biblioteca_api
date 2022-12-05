@@ -3,10 +3,10 @@ package handler
 import (
 	"encoding/json"
 	"io/ioutil"
+	"libreria/src/model"
+	"libreria/src/model/libro"
 	"net/http"
 	"strconv"
-
-	m "libreria/src/model"
 
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -20,7 +20,7 @@ func ListarLibros(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	var l m.Libro
+	var l libro.Libro
 	id := r.URL.Query().Get("search")
 	_only := r.URL.Query().Get("only")
 	only, _ := strconv.ParseBool(_only)
@@ -40,11 +40,11 @@ func VerLibro(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	var libro m.Libro
+	var libro libro.Libro
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err != nil {
-		panic(m.ErrorRes{Titulo: "key no valida", Cuerpo: err, Mensaje: err.Error()})
+		panic(model.ErrorRes{Titulo: "key no valida", Cuerpo: err, Mensaje: err.Error()})
 	}
 
 	libro.Ver(id)
@@ -64,7 +64,7 @@ func CrearLibro(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(err.Error())
 	} else {
 		// Preparar formulario y mandar la informacion
-		var libro m.LibroFormulario
+		var libro libro.LibroFormulario
 		if err = json.Unmarshal(reqBody, &libro); err == nil {
 			nuevoLibro, err2 := libro.Crear()
 			if err != nil {
@@ -94,7 +94,7 @@ func ActualizarLibro(w http.ResponseWriter, r *http.Request) {
 		reqBody, err := ioutil.ReadAll(r.Body)
 
 		if err == nil {
-			var update m.LibroFormulario
+			var update libro.LibroFormulario
 			json.Unmarshal(reqBody, &update)
 
 			if libro, err2 := update.Editar(id); err2 == nil {
@@ -121,7 +121,7 @@ func EliminarLibro(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err == nil {
-		var l m.Libro
+		var l libro.Libro
 		err = l.Eliminar(id)
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())

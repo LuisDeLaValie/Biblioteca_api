@@ -3,9 +3,9 @@ package handler
 import (
 	"encoding/json"
 	"io/ioutil"
+	"libreria/src/model"
+	"libreria/src/model/autor"
 	"net/http"
-
-	m "libreria/src/model"
 
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -14,14 +14,14 @@ import (
 
 func ListarAutores(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	var a m.Autor
+	var a autor.Autor
 
 	search := r.URL.Query().Get("search")
 
 	colecciones, err := a.Listar(search)
 
 	if err != nil {
-		cerror := m.ErrorRes{Titulo: "Error obteniendo los datos", Cuerpo: err, Mensaje: err.Error()}
+		cerror := model.ErrorRes{Titulo: "Error obteniendo los datos", Cuerpo: err, Mensaje: err.Error()}
 		json.NewEncoder(w).Encode(cerror)
 	}
 	json.NewEncoder(w).Encode(colecciones)
@@ -31,7 +31,7 @@ func VerAutor(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err == nil {
-		var autor m.Autor
+		var autor autor.Autor
 		autor.Ver(id)
 
 		json.NewEncoder(w).Encode(autor)
@@ -49,7 +49,7 @@ func CrearAutor(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(err.Error())
 	} else {
 		// Preparar formulario y mandar la informacion
-		var autor m.Autor
+		var autor autor.Autor
 		json.Unmarshal(reqBody, &autor)
 		err := autor.Crear()
 
@@ -72,7 +72,7 @@ func ActualizarAutor(w http.ResponseWriter, r *http.Request) {
 		reqBody, err := ioutil.ReadAll(r.Body)
 
 		if err == nil {
-			var update m.Autor
+			var update autor.Autor
 			json.Unmarshal(reqBody, &update)
 			err := update.Editar(id)
 
@@ -95,7 +95,7 @@ func EliminarAutor(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err == nil {
-		var autor m.Autor
+		var autor autor.Autor
 		err = autor.Eliminar(id)
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())

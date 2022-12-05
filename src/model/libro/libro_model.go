@@ -1,18 +1,18 @@
-package model
+package libro
 
 import (
 	"context"
+	"fmt"
 	"time"
 
+	"libreria/src/db"
+	"libreria/src/model"
+	"libreria/src/model/autor"
+
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-
-	conn "libreria/src/db"
-
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
-
-// https://www.mongodb.com/docs/drivers/go/current/fundamentals/crud/
 
 type LibroPaginacions struct {
 	To  int
@@ -25,8 +25,8 @@ type LibroOrigen struct {
 type Libro struct {
 	Key        primitive.ObjectID `json:"key" bson:"_id,omitempty" `
 	Titulo     string             `json:"titulo"`
-	Sinopsis   string             `json:"sipnosis,omitempty"`
-	Autores    []Autor            `json:"autores,omitempty"`
+	Sinopsis   string             `json:"Sinopsis,omitempty"`
+	Autores    []autor.Autor      `json:"autores,omitempty"`
 	Editorail  string             `json:"editorial,omitempty"`
 	Descargar  string             `json:"descargar,omitempty"`
 	Path       string             `json:"-"`
@@ -38,23 +38,9 @@ type Libro struct {
 
 type ListLibros []*Libro
 
-type LibroFormulario struct {
-	Titulo     string               `json:"titulo" bson:"titulo"`
-	Sipnosis   string               `json:"sinopsis,omitempty" bson:"sinopsis,omitempty"`
-	Autores    []primitive.ObjectID `json:"autores,omitempty" bson:"autor,omitempty"`
-	Editorail  string               `json:"editorial,omitempty" bson:"editorial,omitempty"`
-	Paginas    int                  `json:"paginas,omitempty" bson:"-"`
-	Pagina     int                  `json:"pagina,omitempty" bson:"-"`
-	Origen     LibroOrigen          `json:"origen" bson:"origen"`
-	Path       string               `json:"path,omitempty" bson:"path,omitempty"`
-	Creado     time.Time            `json:"creado,omitempty" bson:"creado,omitempty"`
-	Paginacion LibroPaginacions     `json:"-" bson:"paginacion,omitempty"`
-}
-
-/// Listar todos los sibros
 func (l Libro) Listar(search string, all bool) (ListLibros, error) {
 	var _ctx = context.Background()
-	var con conn.Mongodb
+	var con db.Mongodb
 	defer func() {
 		con.Close()
 		_ctx.Done()
@@ -153,11 +139,10 @@ func (l Libro) Listar(search string, all bool) (ListLibros, error) {
 		libros = append(libros, &aux)
 	}
 	return libros, nil
-
 }
 func (l *Libro) Ver(key primitive.ObjectID) error {
 	var _ctx = context.Background()
-	var con conn.Mongodb
+	var con db.Mongodb
 	defer func() {
 		con.Close()
 		_ctx.Done()
@@ -172,7 +157,7 @@ func (l *Libro) Ver(key primitive.ObjectID) error {
 	cur, err := con.GetCollection("libros").Aggregate(_ctx, mongo.Pipeline{lookupStage, projectStage, machtState, limtState})
 
 	if err != nil {
-		return ErrorRes{
+		return model.ErrorRes{
 			Titulo:  "Error al traer los datos",
 			Mensaje: err.Error(),
 			Cuerpo:  err,
@@ -183,7 +168,7 @@ func (l *Libro) Ver(key primitive.ObjectID) error {
 	err = cur.Decode(&l)
 
 	if err != nil {
-		return ErrorRes{
+		return model.ErrorRes{
 			Titulo:  "Error al obtener los datos",
 			Mensaje: err.Error(),
 			Cuerpo:  err,
@@ -193,11 +178,12 @@ func (l *Libro) Ver(key primitive.ObjectID) error {
 	l.Descargar = "https://drive.google.com/uc?export=download&id=" + l.Path
 	l.Verr = "https://drive.google.com/file/d/" + l.Path + "/view?usp=sharing"
 	// https://lh3.google.com/u/0/d/1Y3dRJfPta1vlS1HjdK3I_nV7wd6yNmn1=w200-h190-p-k-nu-iv1
+	l.Path = ""
 	return nil
 }
 func (l *Libro) Eliminar(key primitive.ObjectID) error {
 
-	var con conn.Mongodb
+	var con db.Mongodb
 	defer func() {
 		con.Close()
 	}()
@@ -210,81 +196,48 @@ func (l *Libro) Eliminar(key primitive.ObjectID) error {
 	}
 }
 
-// metodo de descarga
-/* func (l *Libro) Descargar(key primitive.ObjectID) []byte {
-	l.Ver(key)
-	///Volumes/GoogleDrive/Mi unidad/Libros/overlord/Overlord Volumen 9.pdf
-	// path := "/Volumes/GoogleDrive/Mi unidad/Libros" + l.Path
-	path := "/Volumes/GoogleDrive/Mi unidad/Libros/overlord/Overlord Volumen 9.pdf"
-
-	/// tambien teneenmos el paquete bufio para leer archivos
-	archivo, err := os.Open(path)
-	// difer nos ayuda a que sin importa lo que pase se serrara el
-	// archi para no mantenerlo abierto
-	defer archivo.Close()
-
-	if err != nil {
-		panic(ErrorRes{Cuerpo: err, Mensaje: err.Error()})
+func (l Libro) Compare(com Libro) *string {
+	mensaje := ""
+	if l.Titulo != com.Titulo {
+		mensaje += fmt.Sprintf("Titulo no coincide:\n\tN)%s\n\tO)%s\n", l.Titulo, com.Titulo)
 	}
-	scanner := bufio.NewScanner(archivo)
-	return scanner.Bytes()
+	if l.Sinopsis != com.Sinopsis {
+		mensaje += fmt.Sprintf("Sinopsis no coincide:\n\tN)%s\n\tO)%s\n", l.Sinopsis, com.Sinopsis)
+	}
+	if len(l.Autores) != len(com.Autores) {
+		mensaje += fmt.Sprintf("Autores no coincide:\n\tN)%d\n\tO)%d\n", len(l.Autores), len(com.Autores))
+	} else {
+		for i := range l.Autores {
+			n := l.Autores[i]
+			o := com.Autores[i]
+			if n != o {
+				mensaje += fmt.Sprintf("Paginacion no coincide:\n\tN)[%d]%+v\n\tO)[%d]%+v\n", i, l.Paginacion, i, com.Paginacion)
 
-	// if fileBytes, err := ioutil.ReadFile(path); err == nil {
-	// 	return fileBytes
-	// } else {
-
-	// 	panic(ErrorRes{Cuerpo: err, Mensaje: err.Error()})
-	// }
-
-} */
-
-func (libro *LibroFormulario) Crear() (*Libro, error) {
-	var con conn.Mongodb
-	defer func() {
-		con.Close()
-	}()
-	var nuevoLibro Libro
-
-	// Preparar datos del formulario
-	libro.Creado = time.Now()
-	libro.Paginacion = LibroPaginacions{0, libro.Paginas}
-
-	// Insertar Libro
-	oid, err := con.GetCollection("libros").InsertOne(context.TODO(), libro)
-	if err != nil {
-		return nil, err
+			}
+		}
+	}
+	if l.Editorail != com.Editorail {
+		mensaje += fmt.Sprintf("Editorail no coincide:\n\tN)%s\n\tO)%s\n", l.Editorail, com.Editorail)
+	}
+	if l.Descargar != com.Descargar {
+		mensaje += fmt.Sprintf("Descargar no coincide:\n\tN)%s\n\tO)%s\n", l.Descargar, com.Descargar)
+	}
+	if l.Path != com.Path {
+		mensaje += fmt.Sprintf("Path no coincide:\n\tN)%s\n\tO)%s\n", l.Path, com.Path)
+	}
+	if l.Verr != com.Verr {
+		mensaje += fmt.Sprintf("Verr no coincide:\n\tN)%s\n\tO)%s\n", l.Verr, com.Verr)
+	}
+	if l.Paginacion != com.Paginacion {
+		mensaje += fmt.Sprintf("Paginacion no coincide:\n\tN)%+v\n\tO)%+v\n", l.Paginacion, com.Paginacion)
+	}
+	if l.Origen != com.Origen {
+		mensaje += fmt.Sprintf("Origen no coincide:\n\tN)%s\n\tO)%s\n", l.Origen, com.Origen)
 	}
 
-	nuevoLibro.Ver(oid.InsertedID.(primitive.ObjectID))
-	return &nuevoLibro, nil
-}
-
-func (upLibro *LibroFormulario) Editar(key primitive.ObjectID) (*Libro, error) {
-	var con conn.Mongodb
-	defer func() {
-		con.Close()
-	}()
-	var libro Libro
-
-	filtter := bson.M{"_id": key}
-	update := bson.M{
-		"$set": bson.M{
-			"titulo":        upLibro.Titulo,
-			"sinopsis":      upLibro.Sipnosis,
-			"autor":         upLibro.Autores,
-			"editorial":     upLibro.Editorail,
-			"origen":        upLibro.Origen,
-			"path":          upLibro.Path,
-			"paginacion.to": upLibro.Pagina,
-		},
+	if mensaje == "" {
+		return nil
+	} else {
+		return &mensaje
 	}
-
-	_, err := con.GetCollection("libros").UpdateOne(context.TODO(), filtter, update)
-	if err != nil {
-		return nil, ErrorRes{Cuerpo: err, Mensaje: err.Error()}
-
-	}
-
-	libro.Ver(key)
-	return &libro, nil
 }

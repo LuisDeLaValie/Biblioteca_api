@@ -1,10 +1,11 @@
-package model
+package coleccion
 
 import (
 	"context"
 	"time"
 
-	conn "libreria/src/db"
+	"libreria/src/db"
+	"libreria/src/model/libro"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -15,7 +16,7 @@ type Coleccion struct {
 	Key        primitive.ObjectID `json:"key,omitempty" bson:"_id,omitempty"`
 	Titulo     string             `json:"titulo" bson:"titulo"`
 	Sinopsis   string             `json:"sipnosis,omitempty" bson:"sipnosis,omitempty"`
-	Libos_list []Libro            `json:"libros,omitempty" bson:"libros"`
+	Libos_list []libro.Libro      `json:"libros,omitempty" bson:"libros"`
 	Path       string             `json:"path,omitempty" bson:"path,omitempty"`
 	Creado     time.Time          `json:"creado" bson:"creado"`
 }
@@ -24,7 +25,7 @@ type ListColeccion []*Coleccion
 /// Listar todos los sibros
 func (coll Coleccion) Listar(search string) (ListColeccion, error) {
 	var _ctx = context.Background()
-	var con conn.Mongodb
+	var con db.Mongodb
 	defer func() {
 		con.Close()
 		_ctx.Done()
@@ -65,7 +66,7 @@ func (coll Coleccion) Listar(search string) (ListColeccion, error) {
 
 func (coll *Coleccion) Ver(key primitive.ObjectID) error {
 	var _ctx = context.Background()
-	var con conn.Mongodb
+	var con db.Mongodb
 	defer func() {
 		con.Close()
 		_ctx.Done()
@@ -102,7 +103,7 @@ func (coll *Coleccion) Ver(key primitive.ObjectID) error {
 
 func (coll Coleccion) Eliminar(key primitive.ObjectID) error {
 
-	var con conn.Mongodb
+	var con db.Mongodb
 	defer func() {
 		con.Close()
 	}()
@@ -113,76 +114,4 @@ func (coll Coleccion) Eliminar(key primitive.ObjectID) error {
 	} else {
 		return nil
 	}
-}
-
-type ColeccionFormulario struct {
-	Titulo   string               `json:"titulo" bson:"titulo"`
-	Sinopsis string               `json:"sinopsis,omitempty" bson:"sinopsis,omitempty"`
-	Libors   []primitive.ObjectID `json:"libros" bson:"libros"`
-	Path     string               `json:"path,omitempty" bson:"path,omitempty"`
-	Creado   time.Time            `json:"creado,omitempty" bson:"creado"`
-}
-
-func (coleccion *ColeccionFormulario) Crear() (*Coleccion, error) {
-	var _ctx = context.Background()
-	var con conn.Mongodb
-	defer func() {
-		con.Close()
-		_ctx.Done()
-	}()
-	// Preparar datos del formulario
-	coleccion.Creado = time.Now()
-
-	// Insertar Libro
-	oid, err := con.GetCollection("coleccion").InsertOne(_ctx, coleccion)
-
-	if err == nil {
-
-		id := oid.InsertedID.(primitive.ObjectID)
-		var col Coleccion
-		err := col.Ver(id)
-
-		if err != nil {
-			return nil, err
-		} else {
-			return &col, nil
-		}
-
-	} else {
-		return nil, err
-	}
-}
-
-func (upColecc *ColeccionFormulario) Editar(key primitive.ObjectID) (*Coleccion, error) {
-	var _ctx = context.Background()
-
-	var con conn.Mongodb
-	defer func() {
-		con.Close()
-		_ctx.Done()
-	}()
-	filtter := bson.M{"_id": key}
-	update := bson.M{
-		"$set": bson.M{
-			"titulo":   upColecc.Titulo,
-			"sinopsis": upColecc.Sinopsis,
-			"libros":   upColecc.Libors,
-			"path":     upColecc.Path,
-		},
-	}
-
-	_, err := con.GetCollection("coleccion").UpdateOne(_ctx, filtter, update)
-	if err != nil {
-		return nil, err
-	} else {
-		var coleccion Coleccion
-		err := coleccion.Ver(key)
-
-		if err != nil {
-			return nil, err
-		} else {
-			return &coleccion, nil
-		}
-	}
-
 }

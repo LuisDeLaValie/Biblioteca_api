@@ -1,8 +1,8 @@
-package model
+package autor
 
 import (
 	"context"
-	conn "libreria/src/db"
+	"libreria/src/db"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -17,7 +17,7 @@ type ListAutor []*Autor
 
 func (autor *Autor) Crear() error {
 	var _ctx = context.Background()
-	var con conn.Mongodb
+	var con db.Mongodb
 	defer func() {
 		con.Close()
 		_ctx.Done()
@@ -36,7 +36,7 @@ func (autor *Autor) Crear() error {
 /// Listar todos los sibros
 func (autor Autor) Listar(search string) (ListAutor, error) {
 	var _ctx = context.Background()
-	var con conn.Mongodb
+	var con db.Mongodb
 	defer func() {
 		con.Close()
 		_ctx.Done()
@@ -74,7 +74,7 @@ func (autor Autor) Listar(search string) (ListAutor, error) {
 }
 func (autor *Autor) Ver(key primitive.ObjectID) {
 	var _ctx = context.Background()
-	var con conn.Mongodb
+	var con db.Mongodb
 	defer func() {
 		con.Close()
 		_ctx.Done()
@@ -86,7 +86,7 @@ func (autor *Autor) Ver(key primitive.ObjectID) {
 }
 func (upAutor *Autor) Editar(key primitive.ObjectID) error {
 	var _ctx = context.Background()
-	var con conn.Mongodb
+	var con db.Mongodb
 	defer func() {
 		con.Close()
 		_ctx.Done()
@@ -108,7 +108,7 @@ func (upAutor *Autor) Editar(key primitive.ObjectID) error {
 }
 func (autor Autor) Eliminar(key primitive.ObjectID) error {
 
-	var con conn.Mongodb
+	var con db.Mongodb
 	defer func() {
 		con.Close()
 	}()
