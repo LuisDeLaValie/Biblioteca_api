@@ -9,7 +9,7 @@ import (
 )
 
 type Autor struct {
-	Key    primitive.ObjectID `bson:"_id,omitempty" json:"key,omitempty"`
+	Key    primitive.ObjectID `bson:"_id" json:"key,omitempty"`
 	Nombre string             `bson:"nombre" json:"nombre"`
 }
 
