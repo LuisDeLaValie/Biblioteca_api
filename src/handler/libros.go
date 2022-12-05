@@ -25,7 +25,10 @@ func ListarLibros(w http.ResponseWriter, r *http.Request) {
 	_only := r.URL.Query().Get("only")
 	only, _ := strconv.ParseBool(_only)
 
-	libros := l.Listar(id, only)
+	libros, err := l.Listar(id, only)
+	if err != nil {
+		panic(err)
+	}
 	json.NewEncoder(w).Encode(libros)
 }
 func VerLibro(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +44,7 @@ func VerLibro(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err != nil {
-		panic(m.ErrorRes{Error: "key no valida", Cuerpo: err, Mensaje: err.Error()})
+		panic(m.ErrorRes{Titulo: "key no valida", Cuerpo: err, Mensaje: err.Error()})
 	}
 
 	libro.Ver(id)
@@ -63,11 +66,15 @@ func CrearLibro(w http.ResponseWriter, r *http.Request) {
 		// Preparar formulario y mandar la informacion
 		var libro m.LibroFormulario
 		if err = json.Unmarshal(reqBody, &libro); err == nil {
-			nuevoLibro := libro.Crear()
-			json.NewEncoder(w).Encode(nuevoLibro)
-		} else {
-			json.NewEncoder(w).Encode(err.Error())
+			nuevoLibro, err2 := libro.Crear()
+			if err != nil {
+				panic(err2)
+			} else {
 
+				json.NewEncoder(w).Encode(nuevoLibro)
+			}
+		} else {
+			panic(err)
 		}
 
 	}
@@ -89,8 +96,13 @@ func ActualizarLibro(w http.ResponseWriter, r *http.Request) {
 		if err == nil {
 			var update m.LibroFormulario
 			json.Unmarshal(reqBody, &update)
-			libro := update.Editar(id)
-			json.NewEncoder(w).Encode(libro)
+
+			if libro, err2 := update.Editar(id); err2 == nil {
+				json.NewEncoder(w).Encode(libro)
+			} else {
+				panic(err2)
+			}
+
 		} else {
 			json.NewEncoder(w).Encode(err.Error())
 		}

@@ -2,7 +2,6 @@ package model
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -15,11 +14,11 @@ import (
 
 // https://www.mongodb.com/docs/drivers/go/current/fundamentals/crud/
 
-type _Paginacions struct {
+type LibroPaginacions struct {
 	To  int
 	End int
 }
-type origen struct {
+type LibroOrigen struct {
 	Nombre string `json:"nombre"`
 	Url    string `json:"url"`
 }
@@ -32,15 +31,28 @@ type Libro struct {
 	Descargar  string             `json:"descargar,omitempty"`
 	Path       string             `json:"-"`
 	Verr       string             `json:"ver,omitempty"`
-	Paginacion _Paginacions       `json:"paginacion,omitempty"`
-	Origen     origen             `json:"origen,omitempty"`
+	Paginacion LibroPaginacions   `json:"paginacion,omitempty"`
+	Origen     LibroOrigen        `json:"origen,omitempty"`
 	Creado     time.Time          `json:"creado"`
 }
 
 type ListLibros []*Libro
 
+type LibroFormulario struct {
+	Titulo     string               `json:"titulo" bson:"titulo"`
+	Sipnosis   string               `json:"sinopsis,omitempty" bson:"sinopsis,omitempty"`
+	Autores    []primitive.ObjectID `json:"autores,omitempty" bson:"autor,omitempty"`
+	Editorail  string               `json:"editorial,omitempty" bson:"editorial,omitempty"`
+	Paginas    int                  `json:"paginas,omitempty" bson:"-"`
+	Pagina     int                  `json:"pagina,omitempty" bson:"-"`
+	Origen     LibroOrigen          `json:"origen" bson:"origen"`
+	Path       string               `json:"path,omitempty" bson:"path,omitempty"`
+	Creado     time.Time            `json:"creado,omitempty" bson:"creado,omitempty"`
+	Paginacion LibroPaginacions     `json:"-" bson:"paginacion,omitempty"`
+}
+
 /// Listar todos los sibros
-func (l Libro) Listar(search string, all bool) ListLibros {
+func (l Libro) Listar(search string, all bool) (ListLibros, error) {
 	var _ctx = context.Background()
 	var con conn.Mongodb
 	defer func() {
@@ -128,7 +140,7 @@ func (l Libro) Listar(search string, all bool) ListLibros {
 	cur, err := con.GetCollection("libros").Aggregate(_ctx, pipeline)
 
 	if err != nil {
-		panic(ErrorRes{Cuerpo: err, Mensaje: err.Error()})
+		return nil, err
 	}
 	for cur.Next(_ctx) {
 
@@ -136,14 +148,14 @@ func (l Libro) Listar(search string, all bool) ListLibros {
 		err = cur.Decode(&aux)
 
 		if err != nil {
-			panic(ErrorRes{Cuerpo: err, Mensaje: err.Error()})
+			return nil, err
 		}
 		libros = append(libros, &aux)
 	}
+	return libros, nil
 
-	return libros
 }
-func (l *Libro) Ver(key primitive.ObjectID) {
+func (l *Libro) Ver(key primitive.ObjectID) error {
 	var _ctx = context.Background()
 	var con conn.Mongodb
 	defer func() {
@@ -160,18 +172,28 @@ func (l *Libro) Ver(key primitive.ObjectID) {
 	cur, err := con.GetCollection("libros").Aggregate(_ctx, mongo.Pipeline{lookupStage, projectStage, machtState, limtState})
 
 	if err != nil {
-		panic(ErrorRes{Error: "Error al buscar datos", Cuerpo: err, Mensaje: err.Error()})
+		return ErrorRes{
+			Titulo:  "Error al traer los datos",
+			Mensaje: err.Error(),
+			Cuerpo:  err,
+		}
 	}
 
 	cur.Next(_ctx)
 	err = cur.Decode(&l)
 
 	if err != nil {
-		panic(ErrorRes{Error: "Error al obtener los datos", Cuerpo: err, Mensaje: err.Error()})
+		return ErrorRes{
+			Titulo:  "Error al obtener los datos",
+			Mensaje: err.Error(),
+			Cuerpo:  err,
+		}
+
 	}
 	l.Descargar = "https://drive.google.com/uc?export=download&id=" + l.Path
 	l.Verr = "https://drive.google.com/file/d/" + l.Path + "/view?usp=sharing"
 	// https://lh3.google.com/u/0/d/1Y3dRJfPta1vlS1HjdK3I_nV7wd6yNmn1=w200-h190-p-k-nu-iv1
+	return nil
 }
 func (l *Libro) Eliminar(key primitive.ObjectID) error {
 
@@ -216,20 +238,7 @@ func (l *Libro) Eliminar(key primitive.ObjectID) error {
 
 } */
 
-type LibroFormulario struct {
-	Titulo     string               `json:"titulo" bson:"titulo"`
-	Sipnosis   string               `json:"sinopsis,omitempty" bson:"sinopsis,omitempty"`
-	Autores    []primitive.ObjectID `json:"autores,omitempty" bson:"autor,omitempty"`
-	Editorail  string               `json:"editorial,omitempty" bson:"editorial,omitempty"`
-	Paginas    int                  `json:"paginas,omitempty" bson:"-"`
-	Pagina     int                  `json:"pagina,omitempty" bson:"-"`
-	Origen     origen               `json:"origen" bson:"origen"`
-	Path       string               `json:"path,omitempty" bson:"path,omitempty"`
-	Creado     time.Time            `json:"creado,omitempty" bson:"creado,omitempty"`
-	Paginacion _Paginacions         `json:"-" bson:"paginacion,omitempty"`
-}
-
-func (libro *LibroFormulario) Crear() Libro {
+func (libro *LibroFormulario) Crear() (*Libro, error) {
 	var con conn.Mongodb
 	defer func() {
 		con.Close()
@@ -238,21 +247,19 @@ func (libro *LibroFormulario) Crear() Libro {
 
 	// Preparar datos del formulario
 	libro.Creado = time.Now()
-	libro.Paginacion = _Paginacions{0, libro.Paginas}
-
-	fmt.Print(libro)
+	libro.Paginacion = LibroPaginacions{0, libro.Paginas}
 
 	// Insertar Libro
 	oid, err := con.GetCollection("libros").InsertOne(context.TODO(), libro)
 	if err != nil {
-		panic(ErrorRes{Cuerpo: err, Mensaje: err.Error()})
+		return nil, err
 	}
 
 	nuevoLibro.Ver(oid.InsertedID.(primitive.ObjectID))
-	return nuevoLibro
+	return &nuevoLibro, nil
 }
 
-func (upLibro *LibroFormulario) Editar(key primitive.ObjectID) Libro {
+func (upLibro *LibroFormulario) Editar(key primitive.ObjectID) (*Libro, error) {
 	var con conn.Mongodb
 	defer func() {
 		con.Close()
@@ -274,9 +281,10 @@ func (upLibro *LibroFormulario) Editar(key primitive.ObjectID) Libro {
 
 	_, err := con.GetCollection("libros").UpdateOne(context.TODO(), filtter, update)
 	if err != nil {
-		panic(ErrorRes{Cuerpo: err, Mensaje: err.Error()})
+		return nil, ErrorRes{Cuerpo: err, Mensaje: err.Error()}
+
 	}
 
 	libro.Ver(key)
-	return libro
+	return &libro, nil
 }
