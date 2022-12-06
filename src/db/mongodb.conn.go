@@ -12,8 +12,8 @@ import (
 var (
 	usr      = "TDTxLE"
 	pwd      = "comemierda1"
-	host     = "localhost"
-	port     = 12500
+	host     = "TDTxLE-mongodb"
+	port     = 27017
 	database = "Libreria"
 )
 
