@@ -122,7 +122,7 @@ func EliminarLibro(w http.ResponseWriter, r *http.Request) {
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err == nil {
 		var l libro.Libro
-		err = l.Eliminar(id)
+		err = l.Eliminar(&id, nil)
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())
 		}

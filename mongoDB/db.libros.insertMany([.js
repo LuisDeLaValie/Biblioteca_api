@@ -1243,4 +1243,14 @@ db.libros.insertMany([
     }
 ])
 
-db.autor.find({$match:{nombre:/Shirotaka/i}})
+db.autor.find({ $match: { nombre: /Shirotaka/i } })
+db.coleccion.aggregate([
+    {
+        $lookup: {
+            from: "libros",
+            localField: "libros.id",
+            foreignField: "_id",
+            as: "libros",
+        },
+    }
+])

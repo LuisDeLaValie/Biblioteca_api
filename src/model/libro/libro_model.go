@@ -181,19 +181,39 @@ func (l *Libro) Ver(key primitive.ObjectID) error {
 	l.Path = ""
 	return nil
 }
-func (l *Libro) Eliminar(key primitive.ObjectID) error {
+func (l *Libro) Eliminar(key *primitive.ObjectID, keys *[]primitive.ObjectID) error {
 
 	var con db.Mongodb
 	defer func() {
 		con.Close()
 	}()
-	filter := bson.M{"_id": key}
-	_, err := con.GetCollection("libros").DeleteOne(context.TODO(), filter)
-	if err != nil {
-		return err
+
+	if key == nil && keys == nil {
+		return fmt.Errorf("*key* y *keys* no pueden ser nil")
+	} else if key != nil && keys != nil {
+		return fmt.Errorf("*key* y *keys* no pueden ser diferente de nil")
+	} else if keys != nil {
+		filter := bson.M{
+			"_id": bson.M{
+				"$in": keys,
+			},
+		}
+		_, err := con.GetCollection("libros").DeleteMany(context.TODO(), filter)
+		if err != nil {
+			return err
+		} else {
+			return nil
+		}
 	} else {
-		return nil
+		filter := bson.M{"_id": key}
+		_, err := con.GetCollection("libros").DeleteOne(context.TODO(), filter)
+		if err != nil {
+			return err
+		} else {
+			return nil
+		}
 	}
+
 }
 
 func (l Libro) Compare(com Libro) *string {

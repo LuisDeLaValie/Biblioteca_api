@@ -6,6 +6,7 @@ import (
 	"libreria/src/model"
 	"libreria/src/model/coleccion"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -98,7 +99,8 @@ func EliminarColeccion(w http.ResponseWriter, r *http.Request) {
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err == nil {
 		var col coleccion.Coleccion
-		err = col.Eliminar(id)
+		all, _ := strconv.ParseBool((vars["all"]))
+		err = col.Eliminar(id, all)
 		if err != nil {
 			json.NewEncoder(w).Encode(err.Error())
 		}

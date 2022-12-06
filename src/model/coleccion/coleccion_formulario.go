@@ -13,7 +13,6 @@ type ColeccionFormulario struct {
 	Titulo   string               `json:"titulo" bson:"titulo"`
 	Sinopsis string               `json:"sinopsis,omitempty" bson:"sinopsis,omitempty"`
 	Libors   []primitive.ObjectID `json:"libros" bson:"libros"`
-	Path     string               `json:"path,omitempty" bson:"path,omitempty"`
 	Creado   time.Time            `json:"creado,omitempty" bson:"creado"`
 }
 
@@ -26,8 +25,6 @@ func (coleccion *ColeccionFormulario) Crear() (*Coleccion, error) {
 	}()
 	// Preparar datos del formulario
 	coleccion.Creado = time.Now()
-
-	// Insertar Libro
 	oid, err := con.GetCollection("coleccion").InsertOne(_ctx, coleccion)
 
 	if err == nil {
@@ -61,7 +58,6 @@ func (upColecc *ColeccionFormulario) Editar(key primitive.ObjectID) (*Coleccion,
 			"titulo":   upColecc.Titulo,
 			"sinopsis": upColecc.Sinopsis,
 			"libros":   upColecc.Libors,
-			"path":     upColecc.Path,
 		},
 	}
 

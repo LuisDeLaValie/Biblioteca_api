@@ -249,7 +249,7 @@ func TestLibroEditar(t *testing.T) {
 func TestLibroeliminar(t *testing.T) {
 	var libro libro.Libro
 
-	if err := libro.Eliminar(id); err != nil {
+	if err := libro.Eliminar(&id, nil); err != nil {
 		t.Error(err)
 		t.Fail()
 	}
