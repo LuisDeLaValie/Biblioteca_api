@@ -14,7 +14,7 @@ import (
 )
 
 func ListarColecciones(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	Headers(&w)
 	var col coleccion.Coleccion
 	search := r.URL.Query().Get("search")
 
@@ -27,7 +27,7 @@ func ListarColecciones(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(colecciones)
 }
 func VerColeccion(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	Headers(&w)
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err == nil {
@@ -44,7 +44,7 @@ func VerColeccion(w http.ResponseWriter, r *http.Request) {
 
 }
 func CrearColeccion(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	Headers(&w)
 
 	// Obtener datos del formulario
 	reqBody, err := ioutil.ReadAll(r.Body)
@@ -66,7 +66,7 @@ func CrearColeccion(w http.ResponseWriter, r *http.Request) {
 
 }
 func ActualizarColeccion(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	Headers(&w)
 
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
@@ -93,7 +93,7 @@ func ActualizarColeccion(w http.ResponseWriter, r *http.Request) {
 
 }
 func EliminarColeccion(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	Headers(&w)
 
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])

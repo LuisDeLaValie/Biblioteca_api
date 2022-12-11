@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"libreria/src/model"
 	"libreria/src/model/libro"
@@ -13,31 +14,47 @@ import (
 )
 
 func ListarLibros(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	defer func() {
-		if r := recover(); r != nil {
-			json.NewEncoder(w).Encode(r)
-		}
-	}()
+	fmt.Println("ListarLibros")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	Headers(&w)
+	w.Header().Set("Accept", "*/*")
 
 	var l libro.Libro
-	id := r.URL.Query().Get("search")
 	_only := r.URL.Query().Get("only")
-	only, _ := strconv.ParseBool(_only)
-
-	libros, err := l.Listar(id, only)
-	if err != nil {
-		panic(err)
+	if _only == "" {
+		_only = "0"
 	}
-	json.NewEncoder(w).Encode(libros)
+	if only, err := strconv.ParseBool(_only); err != nil {
+		elerro := model.ErrorRes{
+			Status: http.StatusBadRequest,
+			Titulo: "dato envalido ",
+			Cuerpo: err,
+		}
+		elerro.Response(w)
+	} else {
+		id := r.URL.Query().Get("search")
+		if libros, err := l.Listar(id, only); err != nil {
+			elerro := model.ErrorRes{
+				Status: http.StatusInternalServerError,
+				Titulo: "Error al Hcer la consulta",
+				Cuerpo: err,
+			}
+			elerro.Response(w)
+		} else {
+			json.NewEncoder(w).Encode(libros)
+		}
+	}
 }
+
 func VerLibro(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	Headers(&w)
 
 	defer func() {
-		if r := recover(); r != nil {
-			json.NewEncoder(w).Encode(r)
+		if rr := recover(); rr != nil {
+			w.WriteHeader(rr.(model.ErrorRes).Status)
+			json.NewEncoder(w).Encode(rr)
 		}
+		fmt.Println("VerLibro")
 	}()
 
 	var libro libro.Libro
@@ -50,12 +67,16 @@ func VerLibro(w http.ResponseWriter, r *http.Request) {
 	libro.Ver(id)
 	json.NewEncoder(w).Encode(libro)
 }
+
 func CrearLibro(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	Headers(&w)
+
 	defer func() {
-		if r := recover(); r != nil {
-			json.NewEncoder(w).Encode(r)
+		if rr := recover(); rr != nil {
+			w.WriteHeader(rr.(model.ErrorRes).Status)
+			json.NewEncoder(w).Encode(rr)
 		}
+		fmt.Println("CrearLibro")
 	}()
 
 	// Obtener datos del formulario
@@ -79,12 +100,16 @@ func CrearLibro(w http.ResponseWriter, r *http.Request) {
 
 	}
 }
+
 func ActualizarLibro(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	Headers(&w)
+
 	defer func() {
-		if r := recover(); r != nil {
-			json.NewEncoder(w).Encode(r)
+		if rr := recover(); rr != nil {
+			w.WriteHeader(rr.(model.ErrorRes).Status)
+			json.NewEncoder(w).Encode(rr)
 		}
+		fmt.Println("ActualizarLibro")
 	}()
 
 	vars := mux.Vars(r)
@@ -110,12 +135,16 @@ func ActualizarLibro(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(err.Error())
 	}
 }
+
 func EliminarLibro(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	Headers(&w)
+
 	defer func() {
-		if r := recover(); r != nil {
-			json.NewEncoder(w).Encode(r)
+		if rr := recover(); rr != nil {
+			w.WriteHeader(rr.(model.ErrorRes).Status)
+			json.NewEncoder(w).Encode(rr)
 		}
+		fmt.Println("EliminarLibro")
 	}()
 
 	vars := mux.Vars(r)
