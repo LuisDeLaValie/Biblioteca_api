@@ -13,7 +13,7 @@ import (
 )
 
 func ListarAutores(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	Headers(&w)
 	var a autor.Autor
 
 	search := r.URL.Query().Get("search")
@@ -27,7 +27,7 @@ func ListarAutores(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(colecciones)
 }
 func VerAutor(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	Headers(&w)
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
 	if err == nil {
@@ -41,7 +41,7 @@ func VerAutor(w http.ResponseWriter, r *http.Request) {
 
 }
 func CrearAutor(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	Headers(&w)
 
 	// Obtener datos del formulario
 	reqBody, err := ioutil.ReadAll(r.Body)
@@ -63,7 +63,7 @@ func CrearAutor(w http.ResponseWriter, r *http.Request) {
 
 }
 func ActualizarAutor(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	Headers(&w)
 
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
@@ -90,7 +90,7 @@ func ActualizarAutor(w http.ResponseWriter, r *http.Request) {
 
 }
 func EliminarAutor(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	Headers(&w)
 
 	vars := mux.Vars(r)
 	id, err := primitive.ObjectIDFromHex(vars["key"])
