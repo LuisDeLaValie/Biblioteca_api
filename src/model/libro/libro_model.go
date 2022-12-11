@@ -101,7 +101,7 @@ func (l Libro) Listar(search string, all bool) (ListLibros, error) {
 				Key: "$lookup", Value: bson.D{
 					{Key: "from", Value: "coleccion"},
 					{Key: "localField", Value: "_id"},
-					{Key: "foreignField", Value: "libros.id"},
+					{Key: "foreignField", Value: "libros"},
 					{Key: "as", Value: "nada"},
 				},
 			},
