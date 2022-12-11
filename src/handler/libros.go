@@ -41,7 +41,14 @@ func ListarLibros(w http.ResponseWriter, r *http.Request) {
 			}
 			elerro.Response(w)
 		} else {
-			json.NewEncoder(w).Encode(libros)
+			res := struct {
+				Total  int
+				Libros libro.ListLibros
+			}{
+				Total:  len(libros),
+				Libros: libros,
+			}
+			json.NewEncoder(w).Encode(res)
 		}
 	}
 }
