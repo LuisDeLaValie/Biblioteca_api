@@ -95,10 +95,7 @@ func (l Libro) Listar(search string, all bool) (ListLibros, error) {
 		{Key: "$match", Value: matchesSearch},
 	}
 
-	if !all {
-		pipeline = mongo.Pipeline{lookupStage, projectStage, matchStage}
-	} else {
-		// left joint
+	if all {
 		lookupStageFilter := bson.D{
 			{
 				Key: "$lookup", Value: bson.D{
@@ -120,25 +117,32 @@ func (l Libro) Listar(search string, all bool) (ListLibros, error) {
 				},
 			},
 		}
-		pipeline = mongo.Pipeline{lookupStageFilter, matchStageFilter, lookupStage, projectStage, matchStage}
-	}
 
-	cur, err := con.GetCollection("libros").Aggregate(_ctx, pipeline)
-
-	if err != nil {
-		return nil, err
-	}
-	for cur.Next(_ctx) {
-
-		var aux Libro
-		err = cur.Decode(&aux)
-
-		if err != nil {
-			return nil, err
+		pipeline = mongo.Pipeline{
+			lookupStageFilter,
+			matchStageFilter,
+			lookupStage,
+			projectStage,
+			matchStage,
 		}
-		libros = append(libros, &aux)
+
+	} else {
+		pipeline = mongo.Pipeline{lookupStage, projectStage, matchStage}
 	}
-	return libros, nil
+
+	if cur, err := con.GetCollection("libros").Aggregate(_ctx, pipeline); err != nil {
+		return nil, err
+	} else {
+		for cur.Next(_ctx) {
+			var aux Libro
+			if err = cur.Decode(&aux); err != nil {
+				return nil, err
+			} else {
+				libros = append(libros, &aux)
+			}
+		}
+		return libros, nil
+	}
 }
 func (l *Libro) Ver(key primitive.ObjectID) error {
 	var _ctx = context.Background()
