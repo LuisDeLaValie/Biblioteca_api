@@ -2,28 +2,38 @@ stages:
   - test # All jobs related for testing such as Unit Test
   - build
 
-flutter_test: # Name of the lane
-  stage: test # type of stage
+libro_test:
+  stage: test
   script:
-    - echo "prueba 1" 
-    - flutter test # Run Flutter test
-    # - echo "test flutter"
+    - go test -v src/model/libro/libro_test.go
   tags:
-    - flutter # Tags for runner
+    - golang 
+    - test 
+
+coleccion_test:
+  stage: test
+  script:
+    - go test -v src/model/coleccion/coleccion_test.go 
+  tags:
+    - golang 
+    - test 
+autor_test:
+  stage: test
+  script:
+    - go test -v src/model/autor/autor_test.go  
+  tags:
+    - golang 
+    - test 
 
 
-flutter_build_android: #Job name
-  stage: build # kind of job
-  before_script:
-    - flutter packages get
-    - flutter clean
+flutter_build_android: 
+  stage: build
   script:
-     - flutter build apk --release
-     - mkdir release
-     - mv build/app/outputs/apk/release/app-release.apk release/runer_gitlab.apk
-  artifacts:
-    paths:
-      - build/app/outputs/apk/release/app-release.apk
-      - release/runer_gitlab.apk
+     - echo "Compilar"
+  # artifacts:
+  #   paths:
+  #     - build/app/outputs/apk/release/app-release.apk
+  #     - release/runer_gitlab.apk
   tags:
-    - flutter
+    - golang 
+    - build 
