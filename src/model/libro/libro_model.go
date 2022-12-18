@@ -26,14 +26,14 @@ type Libro struct {
 	Key        primitive.ObjectID `json:"key" bson:"_id,omitempty" `
 	Titulo     string             `json:"titulo"`
 	Sinopsis   string             `json:"Sinopsis,omitempty"`
-	Autores    []autor.Autor      `json:"autores,omitempty"`
+	Autores    []*autor.Autor     `json:"autores,omitempty"`
 	Editorail  string             `json:"editorial,omitempty"`
 	Descargar  string             `json:"descargar,omitempty"`
 	Path       string             `json:"-"`
 	Verr       string             `json:"ver,omitempty"`
-	Paginacion LibroPaginacions   `json:"paginacion,omitempty"`
-	Origen     LibroOrigen        `json:"origen,omitempty"`
-	Creado     time.Time          `json:"creado"`
+	Paginacion *LibroPaginacions  `json:"paginacion,omitempty"`
+	Origen     *LibroOrigen       `json:"origen,omitempty"`
+	Creado     *time.Time         `json:"creado,omitempty"`
 }
 
 type ListLibros []*Libro
@@ -220,43 +220,47 @@ func (l *Libro) Eliminar(key *primitive.ObjectID, keys *[]primitive.ObjectID) er
 
 }
 
-func (l Libro) Compare(com Libro) *string {
+func (new Libro) Compare(old Libro) *string {
 	mensaje := ""
-	if l.Titulo != com.Titulo {
-		mensaje += fmt.Sprintf("Titulo no coincide:\n\tN)%s\n\tO)%s\n", l.Titulo, com.Titulo)
+	if new.Titulo != old.Titulo {
+		mensaje += fmt.Sprintf("Titulo no coincide:\n\tN)%s\n\tO)%s\n", new.Titulo, old.Titulo)
 	}
-	if l.Sinopsis != com.Sinopsis {
-		mensaje += fmt.Sprintf("Sinopsis no coincide:\n\tN)%s\n\tO)%s\n", l.Sinopsis, com.Sinopsis)
+	if new.Sinopsis != old.Sinopsis {
+		mensaje += fmt.Sprintf("Sinopsis no coincide:\n\tN)%s\n\tO)%s\n", new.Sinopsis, old.Sinopsis)
 	}
-	if len(l.Autores) != len(com.Autores) {
-		mensaje += fmt.Sprintf("Autores no coincide:\n\tN)%d\n\tO)%d\n", len(l.Autores), len(com.Autores))
+
+	if len(new.Autores) != len(old.Autores) {
+		mensaje += fmt.Sprintf("Autores no coincide:\n\tN)%d\n\tO)%d\n", len(new.Autores), len(old.Autores))
 	} else {
-		for i := range l.Autores {
-			n := l.Autores[i]
-			o := com.Autores[i]
-			if n != o {
-				mensaje += fmt.Sprintf("Paginacion no coincide:\n\tN)[%d]%+v\n\tO)[%d]%+v\n", i, l.Paginacion, i, com.Paginacion)
+		for i := range new.Autores {
+			n := new.Autores[i]
+			o := old.Autores[i]
+			if *n != *o {
+				mensaje += fmt.Sprintf("Autor [%d] no coincide:\n\tN)%+v\n\tO)%+v\n", i, new.Paginacion, old.Paginacion)
 
 			}
 		}
 	}
-	if l.Editorail != com.Editorail {
-		mensaje += fmt.Sprintf("Editorail no coincide:\n\tN)%s\n\tO)%s\n", l.Editorail, com.Editorail)
+
+	if new.Editorail != old.Editorail {
+		mensaje += fmt.Sprintf("Editorail no coincide:\n\tN)%s\n\tO)%s\n", new.Editorail, old.Editorail)
 	}
-	if l.Descargar != com.Descargar {
-		mensaje += fmt.Sprintf("Descargar no coincide:\n\tN)%s\n\tO)%s\n", l.Descargar, com.Descargar)
+	if new.Descargar != old.Descargar {
+		mensaje += fmt.Sprintf("Descargar no coincide:\n\tN)%s\n\tO)%s\n", new.Descargar, old.Descargar)
 	}
-	if l.Path != com.Path {
-		mensaje += fmt.Sprintf("Path no coincide:\n\tN)%s\n\tO)%s\n", l.Path, com.Path)
+	if new.Path != old.Path {
+		mensaje += fmt.Sprintf("Path no coincide:\n\tN)%s\n\tO)%s\n", new.Path, old.Path)
 	}
-	if l.Verr != com.Verr {
-		mensaje += fmt.Sprintf("Verr no coincide:\n\tN)%s\n\tO)%s\n", l.Verr, com.Verr)
+	if new.Verr != old.Verr {
+		mensaje += fmt.Sprintf("Verr no coincide:\n\tN)%s\n\tO)%s\n", new.Verr, old.Verr)
 	}
-	if l.Paginacion != com.Paginacion {
-		mensaje += fmt.Sprintf("Paginacion no coincide:\n\tN)%+v\n\tO)%+v\n", l.Paginacion, com.Paginacion)
+
+	if *new.Paginacion != *old.Paginacion {
+		mensaje += fmt.Sprintf("Paginacion no coincide:\n\tN)%+v\n\tO)%+v\n", *new.Paginacion, *old.Paginacion)
 	}
-	if l.Origen != com.Origen {
-		mensaje += fmt.Sprintf("Origen no coincide:\n\tN)%s\n\tO)%s\n", l.Origen, com.Origen)
+
+	if *new.Origen != *old.Origen {
+		mensaje += fmt.Sprintf("Origen no coincide:\n\tN)%s\n\tO)%s\n", *new.Origen, *old.Origen)
 	}
 
 	if mensaje == "" {

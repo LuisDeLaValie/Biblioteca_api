@@ -108,7 +108,7 @@ func TestLibcroParseo(t *testing.T) {
 		libroGeneral = libro.Libro{
 			Titulo:   "Libro Test",
 			Sinopsis: "Este es un libro de pruebas para Test",
-			Autores: []autor.Autor{
+			Autores: []*autor.Autor{
 				{
 					Key:    ida,
 					Nombre: "Shirotaka",
@@ -120,8 +120,8 @@ func TestLibcroParseo(t *testing.T) {
 			},
 			Descargar:  "https://drive.google.com/uc?export=download&id=1OWrmLzsFOMNPxq79-KdAW1s-ytXuw8ov",
 			Verr:       "https://drive.google.com/file/d/1OWrmLzsFOMNPxq79-KdAW1s-ytXuw8ov/view?usp=sharing",
-			Paginacion: libro.LibroPaginacions{To: 0, End: 100},
-			Origen: libro.LibroOrigen{
+			Paginacion: &libro.LibroPaginacions{To: 0, End: 100},
+			Origen: &libro.LibroOrigen{
 				Nombre: "Test",
 				Url:    "www.TDTxLE/prueba/Test",
 			},

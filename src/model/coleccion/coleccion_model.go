@@ -41,11 +41,26 @@ func (coll Coleccion) Listar(search string) (ListColeccion, error) {
 			}},
 		}
 	}
-	lookupStage := bson.D{{Key: "$lookup", Value: bson.D{{Key: "from", Value: "libros"}, {Key: "localField", Value: "libros"}, {Key: "foreignField", Value: "_id"}, {Key: "as", Value: "libros"}}}}
+	lookupStage := bson.D{
+		{Key: "$lookup", Value: bson.D{
+			{Key: "from", Value: "libros"},
+			{Key: "localField", Value: "libros"},
+			{Key: "foreignField", Value: "_id"},
+			{Key: "as", Value: "libros"},
+		}},
+	}
+	projectStage := bson.D{
+		{
+			Key: "$project", Value: bson.D{
+				{Key: "libros.titulo", Value: true},
+				{Key: "libros._id", Value: true},
+			},
+		},
+	}
 	matchStage := bson.D{
 		{Key: "$match", Value: matchesSearch},
 	}
-	cur, err := con.GetCollection("coleccion").Aggregate(_ctx, mongo.Pipeline{lookupStage, matchStage})
+	cur, err := con.GetCollection("coleccion").Aggregate(_ctx, mongo.Pipeline{lookupStage, projectStage, matchStage})
 
 	if err == nil {
 		for cur.Next(_ctx) {

@@ -23,8 +23,16 @@ func ListarColecciones(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		cerror := model.ErrorRes{Titulo: "Error obteniendo los datos", Cuerpo: err, Mensaje: err.Error()}
 		json.NewEncoder(w).Encode(cerror)
+	} else {
+		res := struct {
+			Total     int                     `json:"total"`
+			Coleccion coleccion.ListColeccion `json:"coleccion"`
+		}{
+			Total:     len(colecciones),
+			Coleccion: colecciones,
+		}
+		json.NewEncoder(w).Encode(res)
 	}
-	json.NewEncoder(w).Encode(colecciones)
 }
 func VerColeccion(w http.ResponseWriter, r *http.Request) {
 	Headers(&w)

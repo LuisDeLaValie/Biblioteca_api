@@ -42,8 +42,8 @@ func ListarLibros(w http.ResponseWriter, r *http.Request) {
 			elerro.Response(w)
 		} else {
 			res := struct {
-				Total  int
-				Libros libro.ListLibros
+				Total  int              `json:"total"`
+				Libros libro.ListLibros `json:"libros"`
 			}{
 				Total:  len(libros),
 				Libros: libros,
