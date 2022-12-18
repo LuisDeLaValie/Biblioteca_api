@@ -10,14 +10,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var (
-	usr      = "TDTxLE"
-	pwd      = "comemierda1"
-	host     = "TDTxLE-mongodb"
-	port     = 27017
-	database = "Libreria"
-)
-
 type Mongodb struct {
 	client *mongo.Client
 }
@@ -29,8 +21,8 @@ func (db *Mongodb) GetCollection(coll string) *mongo.Collection {
 		"mongodb://%s:%s@%s:%s",
 		getenv("DB_USER", "TDTxLE"),
 		getenv("DB_PWD", "comemierda1"),
-		getenv("DB_HOST", ""),
-		getenv("DB_POST", ""),
+		getenv("DB_HOST", "localhost"),
+		getenv("DB_POST", "12500"),
 	)
 
 	var err error
@@ -41,7 +33,7 @@ func (db *Mongodb) GetCollection(coll string) *mongo.Collection {
 		if err = db.client.Connect(ctx); err != nil {
 			panic(err.Error())
 		}
-
+		database := getenv("DB_DATABASE", "Libreria")
 		return db.client.Database(database).Collection(coll)
 	} else {
 
