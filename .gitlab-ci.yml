@@ -1,0 +1,29 @@
+stages:
+  - test # All jobs related for testing such as Unit Test
+  - build
+
+flutter_test: # Name of the lane
+  stage: test # type of stage
+  script:
+    - echo "prueba 1" 
+    - flutter test # Run Flutter test
+    # - echo "test flutter"
+  tags:
+    - flutter # Tags for runner
+
+
+flutter_build_android: #Job name
+  stage: build # kind of job
+  before_script:
+    - flutter packages get
+    - flutter clean
+  script:
+     - flutter build apk --release
+     - mkdir release
+     - mv build/app/outputs/apk/release/app-release.apk release/runer_gitlab.apk
+  artifacts:
+    paths:
+      - build/app/outputs/apk/release/app-release.apk
+      - release/runer_gitlab.apk
+  tags:
+    - flutter

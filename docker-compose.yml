@@ -11,6 +11,11 @@ services:
       - mongo-network
     environment:
       - MONGODB_URI=mongodb://TDTxLE:comemierda1@TDTxLE-mongodb:27017
+      - DB_USER=TDTxLE
+      - DB_PWD=comemierda1
+      - DB_HOST=TDTxLE-mongodb
+      - DB_POST=27017
+      - DB_DATABASE=Libreria
 
 networks:
   mongo-network:
